@@ -2,6 +2,8 @@ const path = require('path')
 const express = require('express')
 const ws = require('ws')
 
+const { log$ } = require('~/src/logger/logger')
+
 const app = express()
 
 const pathToClient = path.resolve(__dirname, './client')
@@ -21,7 +23,7 @@ server.on('upgrade', (request, socket, head) => {
   })
 })
 
-function log(...message) {
+function sendLog(message) {
   wss.clients.forEach((client) => {
     if (client.readyState === ws.OPEN) {
       client.send(JSON.stringify(message))
@@ -29,6 +31,4 @@ function log(...message) {
   })
 }
 
-setTimeout(() => {
-  log('this', { is: 'a test' })
-}, 10000)
+log$.subscribe(sendLog)

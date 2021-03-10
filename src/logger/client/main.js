@@ -1,10 +1,10 @@
-console.log('hello')
 const ws = new WebSocket('ws://localhost:3000')
 
 ws.onopen = () => {
-  console.log('[open] Connection established')
+  debug('[ws]')('Connection established')
 }
 
 ws.onmessage = (event) => {
-  console.log(...JSON.parse(event.data))
+  const [namespace, level, args] = JSON.parse(event.data)
+  debug(namespace)(level, ...args)
 }

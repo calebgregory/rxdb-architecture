@@ -10,14 +10,19 @@
     "graphql": "^15.5.0",
     "leveldown": "^5.6.0",
     "node-fetch": "^2.6.1",
+    "postinstall": "^0.7.0",
     "pouchdb-adapter-leveldb": "^7.2.2",
     "rxdb": "^9.15.0",
     "rxjs": "^6.6.6",
     "vorpal": "^1.12.0",
-    "wavy": "^1.0.4"
+    "xoi-logger": "^1.1.2"
   },
   "scripts": {
-    "main": "source .env; node src/main.js"
+    "main": "source .env; node src/main.js",
+    "postinstall": "postinstall"
+  },
+  "postinstall": {
+    ".": "link node_modules/~"
   },
   "devDependencies": {
     "express": "^4.17.1",
