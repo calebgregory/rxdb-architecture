@@ -1,6 +1,5 @@
-const path = require('path')
 const { gql } = require('@urql/core')
-const { Job } = require(path.resolve(__dirname, './jobs.fragments'))
+const { Job } = require('~/src/gql/jobs/jobs.fragments')
 
 module.exports.ListJobs = gql`
   query ListJobs($input: ListJobsInput) {

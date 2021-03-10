@@ -2,11 +2,9 @@ const path = require('path')
 const { gql, createClient } = require('@urql/core')
 const fetch = require('node-fetch')
 
-const _import = (relpath) => require(path.resolve(__dirname, relpath))
-
 // config
 
-const config = _import('./config.json')
+const config = require('~/src/config.json')
 
 const getUrl = (function _getUrl(config, apiName) {
   const endpoint = config.graphqlEndpoints.find(({ name }) => name === apiName)
@@ -23,17 +21,17 @@ if (!token) {
 
 // init
 
-const { createDB } = _import('./db')
+const { createDB } = require('~/src/db')
 
 async function initDB() {
   const db = await createDB()
 
   await db.addCollections({
     jobs: {
-      schema: _import('./db-schema/jobs.json')
+      schema: require('~/src/db-schema/jobs.json')
     },
     content: {
-      schema: _import('./db-schema/content.json')
+      schema: require('~/src/db-schema/content.json')
     }
   })
 }
