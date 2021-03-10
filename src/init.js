@@ -1,10 +1,9 @@
-const path = require('path')
-const { gql, createClient } = require('@urql/core')
+const { createClient } = require('@urql/core')
 const fetch = require('node-fetch')
 
 // config
 
-const config = require('~/src/config.json')
+const config = require('~/config.json')
 
 const getUrl = (function _getUrl(config, apiName) {
   const endpoint = config.graphqlEndpoints.find(({ name }) => name === apiName)
@@ -32,6 +31,9 @@ async function initDB() {
     },
     content: {
       schema: require('~/src/db-schema/content.json')
+    },
+    view: {
+      schema: require('~/src/db-schema/view.json')
     }
   })
 }

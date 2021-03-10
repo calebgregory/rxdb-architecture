@@ -1,18 +1,18 @@
-/*
-actions
-- list jobs
-- list job-content <job-id>
-*/
-
 const vorpal = require('vorpal')()
 
-vorpal.command('list jobs', 'list jobs that belong to you')
+vorpal.command('show jobs list', 'list jobs that belong to you')
   .action(function(args, cb) {
     this.log(args)
     cb()
   })
 
-vorpal.command('list job-contents <job-id>', 'list content on a job')
+vorpal.command('show job <job_id>', 'show a job')
+  .action(function(args, cb) {
+    this.log(args)
+    cb()
+  })
+
+vorpal.command('list job_contents <job_id>', 'list content on a job')
   .action(function(args, cb) {
     this.log(args)
     cb()

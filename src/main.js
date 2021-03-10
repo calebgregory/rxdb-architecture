@@ -1,4 +1,5 @@
 const { init } = require('~/src/init')
+const { makeAccessible } = require('~/src/app')
 const { ListJobs } = require('~/src/gql/jobs/ListJobs')
 const { GetJob } = require('~/src/gql/jobs/GetJob')
 
@@ -17,12 +18,12 @@ const { GetJob } = require('~/src/gql/jobs/GetJob')
   console.log('ListJobs', { items })
 */
 
-async function main({ jobId }) {
-  const { jobsClient, contentClient } = await init()
+async function main() {
+  const app = await init()
+  makeAccessible(app)
 
-  require('~/src/view/app')
-
-  // process.exit(0)
+  // require('~/src/view/root')
+  require('~/src/logger/server.js')
 }
 
 main({ jobId: "job-0e1ae43c-7b18-i144-f8d740abb619-uA0B-9877d0a024d0" })

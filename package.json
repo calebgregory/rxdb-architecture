@@ -18,5 +18,9 @@
   },
   "scripts": {
     "main": "source .env; node src/main.js"
+  },
+  "devDependencies": {
+    "express": "^4.17.1",
+    "ws": "^7.4.4"
   }
 }
