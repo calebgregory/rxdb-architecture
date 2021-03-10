@@ -1,0 +1,14 @@
+{
+  "name": "rxdb-experiments",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:calebgregory/rxdb-experiments.git",
+  "author": "Caleb Gregory <calebgregory@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "@urql/core": "^2.0.0",
+    "graphql": "^15.5.0",
+    "rxdb": "^9.15.0",
+    "rxjs": "^6.6.6"
+  }
+}
