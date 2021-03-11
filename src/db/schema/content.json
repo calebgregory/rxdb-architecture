@@ -1,7 +1,7 @@
 {
-  "title": "job collection schema",
+  "title": "content collection schema",
   "version": 0,
-  "description": "schema for the Job collection",
+  "description": "schema for the Content collection",
   "type": "object",
   "properties": {
     "id": {
@@ -11,5 +11,8 @@
     "createdAt": {
       "type": "string"
     }
+  },
+  "attachments": {
+    "encrypted": false
   }
 }

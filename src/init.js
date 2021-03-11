@@ -1,6 +1,9 @@
-// config
-
+const { createClient } = require('@urql/core')
+const fetch = require('node-fetch')
+const { initDB, initEphemeralDB } = require('~/src/db/init')
 const config = require('~/config.json')
+
+// config
 
 const getUrl = (function _getUrl(config, apiName) {
   const endpoint = config.graphqlEndpoints.find(({ name }) => name === apiName)
@@ -15,27 +18,7 @@ if (!token) {
   throw new Error('no token at process.env.AUTH_TOKEN; please provide that')
 }
 
-// init
-
-const { createClient } = require('@urql/core')
-const fetch = require('node-fetch')
-const { createDB } = require('~/src/db')
-
-async function initDB() {
-  const db = await createDB()
-
-  await db.addCollections({
-    jobs: {
-      schema: require('~/src/db-schema/jobs.json')
-    },
-    content: {
-      schema: require('~/src/db-schema/content.json')
-    },
-    view: {
-      schema: require('~/src/db-schema/view.json')
-    }
-  })
-}
+// create gql clients
 
 function initGQLClients() {
   const _createClient = (apiName) => createClient({
@@ -52,6 +35,7 @@ function initGQLClients() {
 
 module.exports.init = async function init() {
   await initDB()
+  await initEphemeralDB()
 
   const gqlClients = initGQLClients()
 
