@@ -1,0 +1,293 @@
+type Query {
+  getJob(input: GetJobInput!): JobResult!
+  listJobs(input: ListJobsInput): ListJobsResult!
+  autocompleteJobFilterTags(
+    input: AutocompleteExactMatchTagsInput!
+  ): AutocompleteJobFilterTagsResult!
+}
+
+type Mutation {
+  createJob(input: CreateJobInput!): JobResult!
+  deleteJob(input: DeleteJobInput!): DeleteJobResult!
+  updateJob(input: UpdateJobInput!): JobResult!
+  setJobWorkflow(input: SetJobWorkflowInput!): JobResult!
+}
+
+type Job {
+  id: ID!
+  orgID: ID!
+
+  createdAt: AWSDateTime
+  createdBy: ID
+
+  updatedAt: AWSDateTime
+  updatedBy: ID
+
+  completedAt: AWSDateTime
+
+  owner: ID
+  owner_info: User
+
+  customerName: String
+  jobLocation: String
+  workOrderNumber: String
+  fsmLabel: String
+
+  tags: [String!]!
+  tagSuggestions: [String!]
+  internalNote: Note
+
+  steps: [JobStep!]!
+  workflowName: String
+  integrationEntityId: IntegrationEntityId
+  workflowRef: WorkflowReference
+  workflowProviders: [ProviderMetadata!]
+  orgInfo: OrganizationInfo
+}
+
+type IntegrationEntityId {
+  namespace: String!
+  id: ID!
+}
+
+type DocumentationItem {
+  contentID: ID!
+  capturedAt: AWSDateTime!
+  originUri: String
+  tags: [String!]
+  sortAsUnixtimeDecimal: String # see DocumentationItemInput
+  docPredictionIds: [ID!]
+}
+
+type Note {
+  text: String!
+}
+
+type JobStepChoice {
+  options: [String!]!
+  minChoices: Int
+  maxChoices: Int
+  chosen: [String!]
+}
+
+type JobStep {
+  name: String!
+  documentation: [DocumentationItem!]!
+  note: Note
+
+  # all of these booleans default to 'false' if not provided
+  isContentRequired: Boolean
+  isNoteRequired: Boolean
+  isContentSummaryRequired: Boolean
+  isKnowledgebaseContent: Boolean
+  isCustomerFacing: Boolean
+  canAttachVisionLiveRecording: Boolean
+  traits: [String!]
+  choice: JobStepChoice
+}
+
+type ProviderRef {
+  affiliateId: ID!
+  providerPathImmediateToRoot: [ID!]!
+}
+
+type WorkflowReference {
+  group: ID!
+  id: ID!
+  providerRef: ProviderRef
+}
+
+type ProviderMetadata {
+  id: ID!
+  providerName: String
+  descriptionOfProviderToAffiliates: String
+}
+
+type OrganizationInfo {
+  id: ID!
+  orgName: String
+}
+
+type User {
+  id: ID!
+  family_name: String
+  given_name: String
+}
+
+type JobResult {
+  job: Job!
+}
+
+type DeleteJobResult {
+  id: ID!
+}
+
+type JobConnection {
+  items: [Job!]!
+  nextToken: String
+}
+
+type ListJobsResult {
+  jobConnection: JobConnection!
+}
+
+type Completion {
+  completion: String!
+  count: Int
+}
+
+type AutocompleteJobFilterTagsResult {
+  prefix: String! # this is the prefix you requested
+  nextCompletions: [Completion!]!
+}
+
+input AutocompleteExactMatchTagsInput {
+  prefix: String!
+
+  orgID: ID # defaults to identity's organization ID; only superusers may change this.
+  group: ID # defaults to identity's organization ID, but users are authorized for any group ID within your organization.
+  limit: Int # defaults to 10
+}
+
+input DocumentationItemInput {
+  contentID: ID!
+  capturedAt: AWSDateTime!
+  originUri: String
+  tags: [String!]
+
+  sortAsUnixtimeDecimal: String
+  # An arbitrary precision decimal number in string format
+  # representing a datetime in fractional seconds starting from the
+  # Unix epoch.  Once provided, it replaces the use of `captureDate`
+  # for the purpose of sort order relative to other DocumentationItems.
+  #
+  # It is NOT possible to remove this once set - it may only be replaced.
+  # This will provide forward compatiblity with old clients that don't submit this value.
+  #
+  # If present (i.e. non-null) the string *must* be a valid decimal number.
+
+  device_unique_id: String
+}
+
+input NoteInput {
+  text: String!
+}
+
+# this input type should never contain complex types or lists of complex types
+# as that risks complex data loss when users are collaborating.
+input UpdateJobFieldsInput {
+  # Cannot be changed unless you are a superuser
+  orgID: ID
+  updatedAt: AWSDateTime
+  # Set a completedAt datetime to mark the Job as completed
+  completedAt: AWSDateTime
+  customerName: String
+  jobLocation: String
+  workOrderNumber: String
+  fsmLabel: String
+  internalNote: NoteInput
+  tags: [String!]
+}
+
+input DocumentationItemChangeInput {
+  documentationItem: DocumentationItemInput!
+  remove: Boolean # if true, will find Doc Item by matching contentID and captureDate
+}
+
+input JobStepChangeInput {
+  stepIndex: Int!
+  documentationItemChanges: [DocumentationItemChangeInput!]!
+  chosenOptions: [String!]
+  note: String # don't send this if you don't want to change the note!
+}
+
+input UpdateJobInput {
+  id: ID!
+  fieldUpdates: UpdateJobFieldsInput
+  stepChanges: [JobStepChangeInput!]
+}
+
+# when setting a workflow, it must not have any internal data,
+# so no documentation array is allowed.
+input JobWorkflowStepInput {
+  name: String!
+
+  # all of these booleans default to 'false' if not provided
+  isContentRequired: Boolean
+  isNoteRequired: Boolean
+  isContentSummaryRequired: Boolean
+  isKnowledgebaseContent: Boolean
+  isCustomerFacing: Boolean
+}
+
+input WorkflowReferenceInput {
+  group: ID!
+  id: ID!
+}
+
+input JobWorkflowFieldsInput {
+  steps: [JobWorkflowStepInput!]!
+  workflowName: String!
+  workflowRef: WorkflowReferenceInput # this is optional but without it there will be no link to a Workflow for autoshares, etc.
+  updatedAt: AWSDateTime
+}
+
+input SetJobWorkflowInput {
+  id: ID!
+  jobWorkflowFields: JobWorkflowFieldsInput!
+}
+
+input IntegrationEntityIdInput {
+  namespace: String!
+  id: ID!
+}
+
+input NewJobInput {
+  createdAt: AWSDateTime!
+
+  orgID: ID # autofilled from identity
+  owner: ID # autofilled from identity
+  updatedAt: AWSDateTime
+  completedAt: AWSDateTime
+  customerName: String
+  jobLocation: String
+  workOrderNumber: String
+  fsmLabel: String
+  internalNote: NoteInput
+  tags: [String!]
+  integrationEntityId: IntegrationEntityIdInput
+}
+
+input CreateJobInput {
+  id: ID!
+  newJob: NewJobInput!
+  # there's room here for metadata if necessary
+}
+
+input DeleteJobInput {
+  id: ID!
+}
+
+input ListSortInput {
+  by: String! # basically the name of a range key
+  gte: String
+  lte: String
+  ascending: Boolean # defaults to False
+}
+
+input ListPartitionInput {
+  name: String! # the name of a partition key in an LSI or GSI
+  value: String! # the value for the partition key attribute
+}
+
+input ListJobsInput {
+  limit: Int
+  nextToken: String
+  partition: ListPartitionInput # defaults to owner==username
+  sort: ListSortInput # defaults to createdAt
+  exactMatchAllTags: [String!]
+}
+
+input GetJobInput {
+  id: ID!
+}

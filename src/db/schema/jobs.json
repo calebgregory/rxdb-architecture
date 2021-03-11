@@ -2,17 +2,9 @@
   "title": "job collection schema",
   "version": 0,
   "description": "schema for the Job collection",
-  "type": "object",
-  "properties": {
-    "id": {
-      "type": "string",
-      "primary": true
-    },
-    "createdAt": {
-      "type": "string"
-    }
-  },
-  "attachments": {
-    "encrypted": false
-  }
+  "type": "#/definitions/Job/type",
+  "properties": "#/definitions/Job/properties",
+  "indexes": [
+    "id"
+  ]
 }

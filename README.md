@@ -26,3 +26,10 @@ Links
 - https://rxdb.info/
   - https://json-schema.org/learn/getting-started-step-by-step
 - https://github.com/SBoudrias/Inquirer.js/
+
+--
+
+## Anticipated Challenges
+
+- Front End DB migrations
+  - https://rxdb.info/questions-answers.html

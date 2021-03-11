@@ -1,11 +1,16 @@
 const { createDB, createEphemeralDB } = require('./db')
 
+const jobsSchema = {
+  ...require('./schema/jobs.json'),
+  ...require('./schema/__generated__/jobs.rxschema.json').definitions.Job
+}
+
 module.exports.initDB = async function initDB() {
   const db = await createDB()
 
   await db.addCollections({
     jobs: {
-      schema: require('./schema/jobs.json')
+      schema: jobsSchema,
     },
     content: {
       schema: require('./schema/content.json')
@@ -18,7 +23,7 @@ module.exports.initEphemeralDB = async function initEphemeralDB() {
 
   await eph.addCollections({
     jobs: {
-      schema: require('./schema/jobs.json')
+      schema: jobsSchema,
     },
     content: {
       schema: require('./schema/content.json')
