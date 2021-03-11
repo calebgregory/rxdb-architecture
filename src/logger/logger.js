@@ -1,5 +1,4 @@
 const Rx = require('rxjs')
-const { registerLoggerHook } = require('xoi-logger')
 
 const log$ = new Rx.Subject()
 

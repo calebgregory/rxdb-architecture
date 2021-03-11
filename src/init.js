@@ -1,6 +1,3 @@
-const { createClient } = require('@urql/core')
-const fetch = require('node-fetch')
-
 // config
 
 const config = require('~/config.json')
@@ -20,6 +17,8 @@ if (!token) {
 
 // init
 
+const { createClient } = require('@urql/core')
+const fetch = require('node-fetch')
 const { createDB } = require('~/src/db')
 
 async function initDB() {

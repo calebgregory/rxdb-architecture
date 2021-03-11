@@ -1,3 +1,5 @@
+debug.enable('*')
+
 const ws = new WebSocket('ws://localhost:3000')
 
 ws.onopen = () => {
@@ -6,5 +8,5 @@ ws.onopen = () => {
 
 ws.onmessage = (event) => {
   const [namespace, level, args] = JSON.parse(event.data)
-  debug(namespace)(level, ...args)
+  debug(namespace+':'+level)(...args)
 }
