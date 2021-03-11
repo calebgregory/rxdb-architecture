@@ -1,13 +1,12 @@
 title: view collection schema
 version: 0
-description: schema for the data representation of the view
+description: schema for the list of things that are shown to the user
 type: object
 properties:
-  things_shown:
-    type: array
-    items:
-      type: string
-  display:
-    type: array
-    items:
-      type: string
+  id:
+    type: string
+    primary: true
+  kind:
+    type: string
+index:
+  - [kind, id]

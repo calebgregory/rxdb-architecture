@@ -32,11 +32,3 @@ module.exports.listJobs = async function listJobs() {
 
   await eph().jobs.bulkInsert(items)
 }
-
-module.exports.showJob = async function showJob(id) {
-  const payload = {
-
-  }
-
-  await eph().view
-}
