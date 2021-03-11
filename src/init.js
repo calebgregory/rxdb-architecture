@@ -1,6 +1,6 @@
 const { createClient } = require('@urql/core')
 const fetch = require('node-fetch')
-const { initDB, initEphemeralDB } = require('~/src/db/init')
+const { createDB, createEphemeralDB } = require('~/src/db')
 const config = require('~/config.json')
 
 // config
@@ -34,8 +34,8 @@ function initGQLClients() {
 }
 
 module.exports.init = async function init() {
-  await initDB()
-  await initEphemeralDB()
+  await createDB()
+  await createEphemeralDB()
 
   const gqlClients = initGQLClients()
 

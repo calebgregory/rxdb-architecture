@@ -1,5 +1,5 @@
 const { vorpal } = require('./renderer')
-const { getJob } = require('~/src/actions/get-job')
+const { getJob } = require('~/src/actions/job')
 
 vorpal.command('show job <job_id>', 'show a job')
   .action(async function(args, cb) {

@@ -15,9 +15,11 @@
     "pouchdb-adapter-memory": "^7.2.2",
     "rxdb": "^9.15.0",
     "rxjs": "^6.6.6",
-    "vorpal": "^1.12.0"
+    "vorpal": "^1.12.0",
+    "yaml": "^1.10.0"
   },
   "scripts": {
+    "gen": "node ./scripts/generate-json-schema.js",
     "main": "source .env; source .debug-config; node src/main.js",
     "postinstall": "postinstall"
   },
