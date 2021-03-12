@@ -8,5 +8,5 @@ properties:
     primary: true
   kind:
     type: string
-index:
+indexes:
   - [kind, id]

@@ -57,10 +57,6 @@ module.exports.db = () => {
 
 let eph
 module.exports.createEphemeralDB = async function createEphemeralDB() {
-  if (!fs.existsSync(DB_DIR_PATH)) {
-    fs.mkdirSync(DB_DIR_PATH)
-  }
-
   eph = await createRxDatabase({
     name: DB_DIR_PATH + '/eph',
     adapter: 'memory'

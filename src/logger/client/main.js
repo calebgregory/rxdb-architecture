@@ -10,3 +10,5 @@ ws.onmessage = (event) => {
   const [namespace, level, args] = JSON.parse(event.data)
   debug(namespace+':'+level)(...args)
 }
+
+// @todo - add re-connect logic with backoff when connection closes
