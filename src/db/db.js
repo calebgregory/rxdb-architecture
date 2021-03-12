@@ -24,13 +24,12 @@ const viewSchema = loadYAML('./schema/view.yml')
 
 // persistent database
 
-let db
 module.exports.createDB = async function createDB() {
   if (!fs.existsSync(DB_DIR_PATH)) {
     fs.mkdirSync(DB_DIR_PATH)
   }
 
-  db = await createRxDatabase({
+  const db = await createRxDatabase({
     name: DB_DIR_PATH + '/db',
     adapter: leveldown // the full leveldown-module
   })
@@ -46,18 +45,11 @@ module.exports.createDB = async function createDB() {
 
   return db
 }
-module.exports.db = () => {
-  if (!db) {
-    throw new Error('db has not been created!')
-  }
-  return db
-}
 
 // ephemeral database
 
-let eph
 module.exports.createEphemeralDB = async function createEphemeralDB() {
-  eph = await createRxDatabase({
+  const eph = await createRxDatabase({
     name: DB_DIR_PATH + '/eph',
     adapter: 'memory'
   })
@@ -74,11 +66,5 @@ module.exports.createEphemeralDB = async function createEphemeralDB() {
     },
   })
 
-  return eph
-}
-module.exports.eph = () => {
-  if (!eph) {
-    throw new Error('db has not been created!')
-  }
   return eph
 }

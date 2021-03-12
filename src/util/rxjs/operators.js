@@ -19,3 +19,19 @@ module.exports.batchQueryByKind = (query$) => pipe(
   switchAll(), // https://rxjs.dev/api/operators/switchAll
   scan((acc, [kind, items]) => ({ ...acc, [kind]: items }), {}),
 )
+
+// @todo refactor the above in this way:
+const _batchQueryByKind = (query) => {
+  return (items$) => {
+    return new Observable((observer) => {
+      const subscription = items$.subscribe((items) => {
+        // do some stuff
+
+        observer.next(/* output */)
+      })
+      return () => {
+        subscription.unsubscribe()
+      }
+    })
+  }
+}

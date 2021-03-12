@@ -30,14 +30,15 @@ function initGQLClients() {
   const jobsClient = _createClient('jobs-v2')
   const contentClient = _createClient('content')
 
-  return { jobsClient, contentClient }
+  return { jobs: jobsClient, content: contentClient }
 }
 
 module.exports.init = async function init() {
-  await createDB()
-  await createEphemeralDB()
+  const db = await createDB()
+  const eph = await createEphemeralDB()
 
   const gqlClients = initGQLClients()
 
-  return gqlClients
+  const app = { db, eph, gqlClients }
+  return app
 }

@@ -4,8 +4,10 @@ const { stripGqlFields } = require('~/src/util/gql')
 
 const log = require('~/src/logger').logger('actions/jobs')
 
-module.exports.getJob = async function getJob({ app, eph }, id) {
-  const resp = await app().jobsClient.query(GetJob, {
+module.exports.getJob = async function getJob({ app }, id) {
+  const { eph, gqlClients } = app()
+
+  const resp = await gqlClients.jobs.query(GetJob, {
     id
   }).toPromise()
 

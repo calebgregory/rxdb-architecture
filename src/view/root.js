@@ -1,4 +1,5 @@
 const { vorpal } = require('./renderer')
+const { eph } = require('~/src/app')
 const { batchQueryByKind } = require('~/src/util/rxjs/operators')
 
 const log = require('~/src/logger').logger('view/root')
@@ -7,7 +8,6 @@ require('./job')
 
 vorpal.delimiter("(>'')>").show()
 
-const { eph } = require('~/src/db')
 
 const show$ = eph().view.find().$
 
