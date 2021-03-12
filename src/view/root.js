@@ -1,14 +1,28 @@
 const { vorpal } = require('./renderer')
+const { batchedQueryByKind } = require('~/src/util/rxjs/operators')
+
+const log = require('~/src/logger').logger('view/root')
 
 require('./job')
-require('./job-list')
 
 vorpal.delimiter("(>'')>").show()
 
 const { eph } = require('~/src/db')
 
-// @todo
-eph().view.$.subscribe((val) => {
-  vorpal.ui.redraw(val)
+const show$ = eph().view.find().$
+
+const collectionsByKind = {
+  jobs: () => eph().jobs
+}
+
+const thingsToShow$ = show$.pipe(
+  batchedQueryByKind(
+    (kind, ids) => collectionsByKind[kind]().find().where('id').in(ids).$
+  )
+)
+
+thingsToShow$.subscribe(([kind, item]) => {
+  log.debug('got things to show', { kind, item })
+  vorpal.ui.redraw(JSON.stringify(item))
   vorpal.ui.redraw.done();
 })

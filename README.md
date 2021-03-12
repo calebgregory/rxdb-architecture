@@ -1,13 +1,24 @@
 # rxdb-experiments
 
+(>'')>
+
 ## Getting Started
 
 You'll need
 
 - `.env` file with `export AUTH_TOKEN=<your-xoi-token>` (make sure it's valid)
 - `config.json` in repo root, pointing to the appropriate environment
+- ,-o-o eventually, you'll need a `.yarnrc` pointing to the npm repo on "the nexus" (you know the one)
 
 You should be able to `yarn main` at that point and use this thing.
+
+### Example commands
+
+```sh
+show job job-29cebec6-7a7a-i144-1a9d4ed3a691-u7BD-9b3b53b43b4f
+```
+
+--
 
 ## The idea here
 
@@ -31,20 +42,17 @@ The proposed architecture looks like this:
 --
 
 Links
-- https://formidable.com/open-source/urql/docs/api/core/
-- https://rxdb.info/
-  - https://json-schema.org/learn/getting-started-step-by-step
-- https://github.com/SBoudrias/Inquirer.js/
+
+- [`urql` graphql client](https://formidable.com/open-source/urql/docs/api/core/)
+- [`rxdb`](https://rxdb.info/)
+  - [JSON schema](https://json-schema.org/learn/getting-started-step-by-step)
+  - [`rxdb-utils`, hooks](https://github.com/rafamel/rxdb-utils#hooks)
+- CLI display
+  - [`vorpal`](https://github.com/dthree/vorpal/)
+  - [`inquirer`](https://github.com/SBoudrias/Inquirer.js/)
 
 --
 
 ## Anticipated Challenges
 
-- Front End DB migrations
-  - https://rxdb.info/questions-answers.html
-
-## Example commands
-
-```sh
-show job job-29cebec6-7a7a-i144-1a9d4ed3a691-u7BD-9b3b53b43b4f
-```
+- [Front End DB migrations](https://rxdb.info/questions-answers.html)

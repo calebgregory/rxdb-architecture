@@ -1,6 +1,10 @@
+const log = require('~/src/logger').logger('actions/show')
+
 module.exports.show = async function show({ eph }, kind, id) {
   const item = { kind, id }
-  const shown = await eph().view.findOne({ selector: item })
+  const shown = await eph().view.findOne({ selector: item }).exec()
+  log.debug('show - received command to show item', { item, shown })
+
   if (!shown) {
     await eph().view.insert(item)
   }

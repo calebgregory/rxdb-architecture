@@ -1,4 +1,4 @@
 # suppresses the express server's logs; if you want to tweak this config
 # further, just be warned that the express server logs will obliterate the CLI
 # app
-export DEBUG="*,-express:*,-send"
+export DEBUG="*,-express:*,-send,-finalhandler"

@@ -8,7 +8,7 @@ const { show } = require('~/src/actions/show')
 vorpal.command('show job <job_id>', 'show a job')
   .action(async function(args, cb) {
     await getJob({ app, eph }, args.job_id)
-    await show({ eph }, 'job', args.job_id)
+    await show({ eph }, 'jobs', args.job_id)
     cb()
   })
 
