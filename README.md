@@ -12,6 +12,10 @@ You'll need
 
 You should be able to `yarn main` at that point and use this thing.
 
+### View logs
+
+Open [localhost:3000](http://localhost:3000) in your browser and crack open the console.  You'll see pretty logs that can be easily filtered and searched.  We are very proud.
+
 ### Example commands
 
 ```sh
