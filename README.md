@@ -1,5 +1,14 @@
 # rxdb-experiments
 
+## Getting Started
+
+You'll need
+
+- `.env` file with `export AUTH_TOKEN=<your-xoi-token>` (make sure it's valid)
+- `config.json` in repo root, pointing to the appropriate environment
+
+You should be able to `yarn main` at that point and use this thing.
+
 ## The idea here
 
 We are able to architect a front-end application independently from its
