@@ -1,0 +1,1 @@
+module.exports.rxSchemaFromIntrospection = require('./rx-schema-from-introspection').rxSchemaFromIntrospection

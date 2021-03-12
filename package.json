@@ -21,7 +21,9 @@
   "scripts": {
     "gen": "node ./scripts/generate-json-schema.js",
     "main": "source .env; source .debug-config; node src/main.js",
-    "postinstall": "postinstall"
+    "postinstall": "postinstall",
+    "test": "jest --testPathIgnorePatterns integration-tests",
+    "test:integration": "source .env; source .debug-config; jest integration-tests"
   },
   "postinstall": {
     ".": "link node_modules/~"

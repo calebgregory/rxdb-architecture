@@ -1,0 +1,89 @@
+{
+  "id": "job-29cebec6-7a7a-i144-1a9d4ed3a691-u7BD-9b3b53b43b4f",
+  "orgID": "XOi",
+  "createdAt": "2021-03-10T23:05:58.822000Z",
+  "createdBy": "x@xoi.io",
+  "updatedAt": "2021-03-10T23:34:51.266000Z",
+  "updatedBy": "x@xoi.io",
+  "completedAt": "2021-03-10T23:34:51.266000Z",
+  "owner": "x@xoi.io",
+  "owner_info": {
+    "id": "x@xoi.io",
+    "family_name": "X",
+    "given_name": "Y",
+    "__typename": "User"
+  },
+  "customerName": "foo",
+  "jobLocation": "bar",
+  "workOrderNumber": "summary 7",
+  "fsmLabel": "",
+  "tags": [],
+  "tagSuggestions": [],
+  "internalNote": null,
+  "steps": [
+    {
+      "name": "Step 1",
+      "documentation": [
+        {
+          "contentID": "content-aa2b1f42-7a7a-i144-83d04bbdbddb-u7BD-c3259ebdd8e5.mov",
+          "capturedAt": "2021-03-10T23:06:19.016000Z",
+          "originUri": "file:///var/mobile/Containers/Data/Application/00615A75-137C-441D-8B76-6B95EE6D6708/Documents/XOi/media/63711037336__7B66FB07-BBE0-400B-9C90-1CE76D10B3BD.MOV",
+          "tags": [],
+          "sortAsUnixtimeDecimal": null,
+          "docPredictionIds": [],
+          "__typename": "DocumentationItem"
+        }
+      ],
+      "note": null,
+      "isContentRequired": true,
+      "isNoteRequired": false,
+      "isContentSummaryRequired": true,
+      "isKnowledgebaseContent": false,
+      "isCustomerFacing": false,
+      "canAttachVisionLiveRecording": false,
+      "traits": [],
+      "choice": null,
+      "__typename": "JobStep"
+    },
+    {
+      "name": "Step 2",
+      "documentation": [
+        {
+          "contentID": "content-99cccf68-7a7a-i144-906e46f89011-u7BD-e0b8126efe10.mov",
+          "capturedAt": "2021-03-10T23:06:30.287000Z",
+          "originUri": "file:///var/mobile/Containers/Data/Application/00615A75-137C-441D-8B76-6B95EE6D6708/Documents/XOi/media/63711038404__5E7C4E13-7627-4466-89AA-814FAFAA189C.MOV",
+          "tags": [],
+          "sortAsUnixtimeDecimal": null,
+          "docPredictionIds": [],
+          "__typename": "DocumentationItem"
+        }
+      ],
+      "note": null,
+      "isContentRequired": true,
+      "isNoteRequired": false,
+      "isContentSummaryRequired": true,
+      "isKnowledgebaseContent": false,
+      "isCustomerFacing": false,
+      "canAttachVisionLiveRecording": false,
+      "traits": [],
+      "choice": null,
+      "__typename": "JobStep"
+    }
+  ],
+  "workflowName": "_Summary_Required_2",
+  "integrationEntityId": null,
+  "workflowRef": {
+    "group": "XOi",
+    "id": "wf-20210310160337_summary_required_2",
+    "providerRef": null,
+    "__typename": "WorkflowReference"
+  },
+  "workflowProviders": null,
+  "orgInfo": {
+    "id": "XOi",
+    "orgName": "XOi",
+    "__typename": "OrganizationInfo"
+  },
+  "__typename": "Job",
+  "_id": "lc5qcht1aa:1615507332547"
+}

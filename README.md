@@ -33,3 +33,9 @@ Links
 
 - Front End DB migrations
   - https://rxdb.info/questions-answers.html
+
+## Example commands
+
+```sh
+show job job-29cebec6-7a7a-i144-1a9d4ed3a691-u7BD-9b3b53b43b4f
+```
