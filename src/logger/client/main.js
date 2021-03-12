@@ -32,7 +32,7 @@ function main(ws, m, n, timeoutId) {
           return
 
         default:
-          attemptReconnect()
+          attemptReconnect(m, n)
       }
     }
   })
