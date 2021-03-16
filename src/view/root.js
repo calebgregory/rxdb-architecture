@@ -8,16 +8,20 @@ require('./job')
 
 vorpal.delimiter("(>'')>").show()
 
-
-const show$ = eph().view.find().$
-
 const collectionsByKind = {
   jobs: () => eph().jobs
 }
+function getCollectionByKind(kind) {
+  const collection = collectionsByKind[kind]
+  if (!collection) {
+    throw new Error(`No collection configured for kind {${kind}}!`)
+  }
+  return collection()
+}
 
-const thingsToShow$ = show$.pipe(
+const thingsToShow$ = eph().view.find().$.pipe(
   batchQueryByKind(
-    (kind, ids) => collectionsByKind[kind]().find().where('id').in(ids).$
+    (kind, ids) => getCollectionByKind(kind).find().where('id').in(ids).$
   )
 )
 
@@ -26,10 +30,7 @@ function drawJob(job) {
 }
 
 const drawerByKind = {
-  jobs: (items) => [
-    'jobs',
-    ...items.map(drawJob)
-  ].join('\n')
+  jobs: (items) => [ 'jobs', ...items.map(drawJob) ].join('\n'),
 }
 
 function draw(itemsByKind) {
