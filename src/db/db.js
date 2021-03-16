@@ -21,6 +21,7 @@ const jobsSchema = {
 }
 
 const viewSchema = loadYAML('./schema/view.yml')
+const displaySchema = loadYAML('./schema/display.yml')
 
 // persistent database
 
@@ -63,6 +64,9 @@ module.exports.createEphemeralDB = async function createEphemeralDB() {
     },
     view: {
       schema: viewSchema,
+    },
+    display: {
+      schema: displaySchema,
     },
   })
 

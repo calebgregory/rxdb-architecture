@@ -61,3 +61,11 @@ Links
 ## Anticipated Challenges
 
 - [Front End DB migrations](https://rxdb.info/questions-answers.html)
+
+--
+
+## TODO
+
+1. experiment with Component-level join (more closely resembles what you'd do with React)
+2. experiment with model-layer usage
+3. add authentication

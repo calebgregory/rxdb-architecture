@@ -1,0 +1,12 @@
+title: display collection schema
+version: 0
+description: holds the rows currently being displayed to the user
+type: object
+properties:
+  key:
+    type: string
+    primary: true
+  parentId:
+    type: string
+  content:
+    type: string
