@@ -1,8 +1,8 @@
 {
-  "name": "rxdb-experiments",
-  "version": "1.0.0",
-  "main": "index.js",
-  "repository": "git@github.com:calebgregory/rxdb-experiments.git",
+  "name": "rxdb-architecture",
+  "version": "0.0.0",
+  "private": true,
+  "repository": "git@github.com:calebgregory/rxdb-architecture.git",
   "author": "Caleb Gregory <calebgregory@gmail.com>",
   "license": "MIT",
   "dependencies": {
@@ -11,27 +11,62 @@
     "leveldown": "^5.6.0",
     "node-fetch": "^2.6.1",
     "postinstall": "^0.7.0",
+    "pouchdb-adapter-idb": "^7.2.2",
     "pouchdb-adapter-leveldb": "^7.2.2",
     "pouchdb-adapter-memory": "^7.2.2",
     "ramda": "^0.27.1",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1",
     "rxdb": "^9.15.0",
     "rxjs": "^6.6.6",
+    "typescript": "^4.1.2",
     "vorpal": "^1.12.0",
+    "web-vitals": "^1.0.1",
     "yaml": "^1.10.0"
   },
   "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test:unit": "react-scripts test src",
+    "test:integration": "source .env; source .debug-config; react-scripts test integration-tests",
+    "eject": "react-scripts eject",
     "gen": "node ./scripts/generate-json-schema.js",
     "main": "source .env; source .debug-config; node src/main.js",
-    "postinstall": "postinstall",
-    "test": "jest --testPathIgnorePatterns integration-tests",
-    "test:integration": "source .env; source .debug-config; jest integration-tests"
+    "postinstall": "postinstall"
   },
   "postinstall": {
     ".": "link node_modules/~"
   },
   "devDependencies": {
+    "@testing-library/jest-dom": "^5.11.4",
+    "@testing-library/react": "^11.1.0",
+    "@testing-library/user-event": "^12.1.10",
+    "@types/jest": "^26.0.15",
+    "@types/node": "^12.0.0",
+    "@types/ramda": "^0.27.39",
+    "@types/react": "^17.0.0",
+    "@types/react-dom": "^17.0.0",
     "express": "^4.17.1",
-    "jest": "^26.6.3",
+    "raw.macro": "^0.4.2",
+    "react-scripts": "4.0.3",
     "ws": "^7.4.4"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   }
 }

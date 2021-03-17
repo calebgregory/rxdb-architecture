@@ -1,4 +1,4 @@
-# rxdb-experiments
+# rxdb-architecture
 
 (>'')>
 
