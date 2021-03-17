@@ -112,5 +112,6 @@ dist
 
 # Custom
 config.json
+credentials.json
 dev/
 __generated__/
