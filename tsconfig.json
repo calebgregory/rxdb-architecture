@@ -23,6 +23,8 @@
   "include": [
     "src",
     "config.json",
-    "config.json.d.ts"
+    "config.json.d.ts",
+    "credentials.json",
+    "credentials.json.d.ts"
    ]
 }

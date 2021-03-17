@@ -1,3 +1,18 @@
+/**
+  usage:
+    import { app } from '~/src/app'
+    import { stripGqlFields } from '~/src/util/gql'
+
+    const { gqlClients, eph } = app()
+
+    const id = 'job-...-some-uuid'
+    const resp = await gqlClients.jobs.query(GetJob, {
+      id
+    }).toPromise()
+    const { job } = resp.data.getJob
+
+    await eph().jobs.insert(stripGqlFields(job))
+ */
 import { RxDatabase } from 'rxdb'
 import { Client } from '@urql/core'
 
@@ -35,7 +50,7 @@ export function eph() {
   return _eph
 }
 
-export function makeAccessible(__app: App & { db: RxDatabase<any>, eph: RxDatabase<any> }) {
+export function globalize(__app: App & { db: RxDatabase<any>, eph: RxDatabase<any> }) {
   // store these things privately in memory; external consumers can use the
   // thunks below to access them
   _db = __app.db

@@ -7,6 +7,9 @@
   "license": "MIT",
   "dependencies": {
     "@urql/core": "^2.0.0",
+    "amazon-cognito-identity-js": "^4.5.14",
+    "aws-sdk": "^2.866.0",
+    "debug": "^4.3.1",
     "graphql": "^15.5.0",
     "leveldown": "^5.6.0",
     "node-fetch": "^2.6.1",
@@ -25,7 +28,7 @@
     "yaml": "^1.10.0"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "source .env; react-scripts start",
     "build": "react-scripts build",
     "test:unit": "react-scripts test src",
     "test:integration": "source .env; source .debug-config; react-scripts test integration-tests",
