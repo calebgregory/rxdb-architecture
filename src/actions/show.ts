@@ -1,6 +1,7 @@
+const { app } = require('~/src/app')
 const log = require('~/src/logger').logger('actions/show')
 
-module.exports.show = async function show({ app }, kind, id) {
+export async function show(kind: string, id: string) {
   const { eph } = app()
   const item = { kind, id }
   const shown = await eph().view.findOne({ selector: item }).exec()
@@ -11,7 +12,7 @@ module.exports.show = async function show({ app }, kind, id) {
   }
 }
 
-module.exports.hide = async function hide({ app }, kind, id) {
+export async function hide(kind: string, id: string) {
   const { eph } = app()
   await eph().view.findOne({ selector: { kind, id } }).remove()
 }

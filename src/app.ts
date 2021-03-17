@@ -1,33 +1,41 @@
-module.exports.app = app
-module.exports.db = db
-module.exports.eph = eph
+import { RxDatabase } from 'rxdb'
+import { Client } from '@urql/core'
 
-let _app = null
-let _db = null
-let _eph = null
+interface App {
+  gqlClients: {
+    jobs: Client,
+    content: Client,
+  },
+  db: () => RxDatabase<any>,
+  eph: () => RxDatabase<any>,
+}
 
-function app() {
+let _app: App | null = null
+let _db: RxDatabase<any> = null
+let _eph: RxDatabase<any> = null
+
+export function app() {
   if (!_app) {
     throw new Error('app has not been inited! go do that!')
   }
   return _app
 }
 
-function db() {
+export function db() {
   if (!_db) {
     throw new Error('db has not been created!')
   }
   return _db
 }
 
-function eph() {
+export function eph() {
   if (!_eph) {
     throw new Error('ephemeral db has not been created!')
   }
   return _eph
 }
 
-module.exports.makeAccessible = (__app) => {
+export function makeAccessible(__app: App & { db: RxDatabase<any>, eph: RxDatabase<any> }) {
   // store these things privately in memory; external consumers can use the
   // thunks below to access them
   _db = __app.db

@@ -6,3 +6,5 @@ describe('stripGqlFields', () => {
       .toEqual(require('./fixtures/stripGqlFields.output.json'))
   })
 })
+
+export {}

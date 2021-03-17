@@ -208,4 +208,4 @@ fragment JobResult on JobResult {
 ${Job}
 `
 
-module.exports.Job = Job
+export { Job }

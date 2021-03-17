@@ -1,7 +1,9 @@
-function stripFields(fieldsToDelete, obj) {
+type dict = { [key: string]: any }
+
+function stripFields(fieldsToDelete: string[], obj: dict): dict {
   const copy = { ...obj }
 
-  const recur = (o) => {
+  const recur = (o: dict): dict => {
     if (Array.isArray(o)) {
       return o.map( recur )
     }
@@ -22,6 +24,6 @@ function stripFields(fieldsToDelete, obj) {
   return recur(copy)
 }
 
-module.exports.stripGqlFields = function stripGqlFields(obj) {
+export function stripGqlFields(obj: dict): dict {
   return stripFields(['__typename', '_id'], obj)
 }

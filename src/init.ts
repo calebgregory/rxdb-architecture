@@ -1,17 +1,17 @@
-const { createClient } = require('@urql/core')
-const fetch = require('node-fetch')
-const { createDB, createEphemeralDB } = require('~/src/db')
-const config = require('~/config.json')
+import { createClient } from '@urql/core'
+import partial from 'ramda/src/partial'
+import { createDB, createEphemeralDB } from '~/src/db'
+import config, { Config } from '~/config.json'
 
 // config
 
-const getUrl = (function _getUrl(config, apiName) {
+const getUrl = partial((config: Config, apiName: string): string => {
   const endpoint = config.graphqlEndpoints.find(({ name }) => name === apiName)
   if (!endpoint) {
     throw new Error(`no url found for apiName {${apiName}} in config`)
   }
   return endpoint.url
-}).bind(null, config)
+}, [config])
 
 const token = process.env.AUTH_TOKEN
 if (!token) {
@@ -21,10 +21,9 @@ if (!token) {
 // create gql clients
 
 function initGQLClients() {
-  const _createClient = (apiName) => createClient({
+  const _createClient = (apiName: string) => createClient({
     url: getUrl(apiName),
-    fetchOptions: () => ({ headers: { authorization: token } }),
-    fetch
+    fetchOptions: () => ({ headers: { authorization: token } } as RequestInit),
   })
 
   const jobsClient = _createClient('jobs-v2')
@@ -33,7 +32,7 @@ function initGQLClients() {
   return { jobs: jobsClient, content: contentClient }
 }
 
-module.exports.init = async function init() {
+export async function init() {
   const db = await createDB()
   const eph = await createEphemeralDB()
 

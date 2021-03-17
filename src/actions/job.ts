@@ -1,10 +1,11 @@
 const { GetJob } = require('~/src/gql/jobs/GetJob')
 const { ListJobs } = require('~/src/gql/jobs/ListJobs')
 const { stripGqlFields } = require('~/src/util/gql')
+const { app } = require('~/src/app')
 
 const log = require('~/src/logger').logger('actions/jobs')
 
-module.exports.getJob = async function getJob({ app }, id) {
+export async function getJob(id: string) {
   const { eph, gqlClients } = app()
 
   const resp = await gqlClients.jobs.query(GetJob, {
@@ -22,8 +23,9 @@ module.exports.getJob = async function getJob({ app }, id) {
   await eph().jobs.insert(stripGqlFields(job))
 }
 
-module.exports.listJobs = async function listJobs({ app, eph }) {
-  const resp = await app().jobsClient.query(ListJobs, {
+export async function listJobs() {
+  const { jobsClient, eph } = app()
+  const resp = await jobsClient.query(ListJobs, {
     limit: 10,
   }).toPromise()
 

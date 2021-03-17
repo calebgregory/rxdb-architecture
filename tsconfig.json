@@ -21,6 +21,8 @@
     "jsx": "react-jsx"
   },
   "include": [
-    "src"
-  ]
+    "src",
+    "config.json",
+    "config.json.d.ts"
+   ]
 }

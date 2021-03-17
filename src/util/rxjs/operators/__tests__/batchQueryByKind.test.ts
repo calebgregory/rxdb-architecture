@@ -1,6 +1,6 @@
 const { of } = require('rxjs')
 const { TestScheduler } = require('rxjs/testing')
-const { batchQueryByKind } = require('../operators')
+const { batchQueryByKind } = require('../batchQueryByKind')
 
 const testScheduler = new TestScheduler((actual, expected) => {
   expect(actual).toEqual(expected)
