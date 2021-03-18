@@ -16,8 +16,8 @@ export function Root() {
         <Route exact path="/">
           <Redirect to="/jobs" />
         </Route>
-        <Route path='/jobs' component={JobList} />
         <Route path='/jobs/:id' component={Job} />
+        <Route path='/jobs' component={JobList} />
       </Switch>
     </Router>
   )
