@@ -1,36 +1,23 @@
-// const fs = require('fs')
-// const path = require('path')
-// const leveldown = require('leveldown')
-const raw = require('raw.macro')
-const { addRxPlugin, createRxDatabase } = require('rxdb')
-const YAML = require('yaml')
+import raw from 'raw.macro'
+import { addRxPlugin, createRxDatabase } from 'rxdb'
+import YAML from 'yaml'
+import mergeDeepRight from 'ramda/src/mergeDeepRight'
 
-// const DB_DIR_PATH = path.resolve(__dirname, '../../dev')
-
-// addRxPlugin(require('pouchdb-adapter-leveldb')) // leveldown adapters need the leveldb plugin to work
 addRxPlugin(require('pouchdb-adapter-idb'))
 addRxPlugin(require('pouchdb-adapter-memory'))
 
 // load schema
 
-// function loadYAML(relpath) {
-//   return YAML.parse(fs.readFileSync(path.resolve(__dirname, relpath), 'utf8'))
-// }
-
-const jobsSchema = {
-  ...YAML.parse(raw('~/src/db/schema/jobs.yml')),
-  ...require('~/src/db/schema/__generated__/jobs.rxschema.json').definitions.Job
-}
+const jobsSchema = mergeDeepRight(
+  require('~/src/db/schema/__generated__/jobs.rxschema.json').definitions.Job,
+  YAML.parse(raw('~/src/db/schema/jobs.yml')),
+)
 
 const viewSchema = YAML.parse(raw('~/src/db/schema/view.yml'))
 
 // persistent database
 
 export async function createDB() {
-  // if (!fs.existsSync(DB_DIR_PATH)) {
-  //   fs.mkdirSync(DB_DIR_PATH)
-  // }
-
   const db = await createRxDatabase({
     name: '/db',
     adapter: 'idb',

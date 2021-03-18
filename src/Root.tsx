@@ -6,12 +6,14 @@ import {
   Redirect,
   // Link
 } from "react-router-dom"
+import { Menu } from '~/src/components/Menu'
 import { JobList } from '~/src/screens/JobList'
 import { Job } from '~/src/screens/Job'
 
 export function Root() {
   return (
     <Router>
+      <Menu />
       <Switch>
         <Route exact path="/">
           <Redirect to="/jobs" />

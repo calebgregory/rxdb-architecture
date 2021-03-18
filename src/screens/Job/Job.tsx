@@ -25,18 +25,20 @@ export function Job() {
       <h1 id={job.id}>{getJobTitle(job)}</h1>
       <br />
       <div>
-        {job.steps.map((step: any) => (
-          <div id={`${job.id}.${step.name}`}>
+        {job.steps.map((step: any) => {
+          const key = `${job.id}.${step.name}`
+          return <div key={key} id={key}>
             <h3>{step.name}</h3>
             <div>
-              {step.documentation.map((doc: any) => (
-                <div id={`${job.id}.${step.name}.${doc.contentID}`}>
+              {step.documentation.map((doc: any) => {
+                const key = `${job.id}.${step.name}.${doc.contentID}`
+                return <div key={key} id={key}>
                   <h5>- {doc.contentID}</h5>
                 </div>
-              ))}
+               })}
             </div>
           </div>
-        ))}
+         })}
       </div>
     </div>
   )

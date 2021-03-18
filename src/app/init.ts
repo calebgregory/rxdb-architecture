@@ -45,6 +45,6 @@ export async function init(credentials: Credentials) {
 
   const gqlClients = initGQLClients(session)
 
-  const app = { db, eph, gqlClients }
+  const app = { db: () => db, eph: () => eph, gqlClients }
   return app
 }
