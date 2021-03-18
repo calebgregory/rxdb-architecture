@@ -1,14 +1,24 @@
 import React from 'react'
-import './Root.css'
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Redirect,
+  // Link
+} from "react-router-dom"
+import { JobList } from '~/src/screens/JobList'
+import { Job } from '~/src/screens/Job'
 
 export function Root() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <p>
-          Edit <code>src/Root.tsx</code> and save to reload.
-        </p>
-      </header>
-    </div>
+    <Router>
+      <Switch>
+        <Route exact path="/">
+          <Redirect to="/jobs" />
+        </Route>
+        <Route path='/jobs' component={JobList} />
+        <Route path='/jobs/:id' component={Job} />
+      </Switch>
+    </Router>
   )
 }

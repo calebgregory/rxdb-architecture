@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 const { gql } = require('@urql/core')
 
 const DeleteJobResult = gql`

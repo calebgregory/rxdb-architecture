@@ -4,6 +4,8 @@ import { createDB, createEphemeralDB } from '~/src/db'
 import { authenticateUser, Credentials } from '~/src/services/aws-cognito-auth'
 import config from '~/config.json'
 
+const log = require('~/src/logger').logger('app/init')
+
 // config
 
 const getUrl = (apiName: string): string => {
@@ -20,7 +22,8 @@ function initGQLClients(session: CognitoUserSession) {
   const _createClient = (apiName: string) => createClient({
     url: getUrl(apiName),
     fetchOptions: () => {
-      const token = session.getAccessToken().getJwtToken()
+      // note: it is _very, very important_ that we use `idToken` here
+      const token = session.getIdToken().getJwtToken()
       return { headers: { authorization: token } } as RequestInit
     },
   })
@@ -31,8 +34,11 @@ function initGQLClients(session: CognitoUserSession) {
   return { jobs: jobsClient, content: contentClient }
 }
 
+// init
+
 export async function init(credentials: Credentials) {
   const session = await authenticateUser(credentials)
+  log.debug('authenticated user; got session', { session })
 
   const db = await createDB()
   const eph = await createEphemeralDB()

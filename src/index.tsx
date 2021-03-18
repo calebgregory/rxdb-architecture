@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom'
 import '~/src/index.css'
 import { Root } from '~/src/Root'
 import { reportWebVitals } from '~/src/services/report-web-vitals'
-import { init } from '~/src/init'
+import { init } from '~/src/app/init'
 import { globalize } from '~/src/app'
 
 import credentials from '~/credentials.json'
