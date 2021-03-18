@@ -1,8 +1,9 @@
-const introspection = require('./fixtures/jobs.schema.graphql.introspection.json')
+const jobsIntrospection = require('./fixtures/jobs.schema.graphql.introspection.json')
+const contentIntrospection = require('./fixtures/content.schema.graphql.introspection.json')
 const { rxSchemaFromIntrospection, _indexByName, _xfFieldToProperty } = require('../rx-schema-from-introspection')
 
 describe('_xfFieldToProperty', () => {
-  const _typesByName = _indexByName(introspection.__schema.types)
+  const _typesByName = _indexByName(jobsIntrospection.__schema.types)
 
   describe('transforming non-NON_NULL-ables', () => {
     describe('SCALARs', () => {
@@ -132,6 +133,36 @@ describe('_xfFieldToProperty', () => {
     })
   })
 
+  describe('transforming ENUMs', () => {
+    it('maps them to "string"', () => {
+      const typesByName = _indexByName(contentIntrospection.__schema.types)
+
+      const field = {
+        "name": "status",
+        "description": null,
+        "args": [],
+        "type": {
+          "kind": "NON_NULL",
+          "name": null,
+          "ofType": {
+            "kind": "ENUM",
+            "name": "VirusScanStatus",
+            "ofType": null
+          }
+        },
+        "isDeprecated": false,
+        "deprecationReason": null
+      }
+      const expected = {
+        "status": {
+          "type": "string"
+        }
+      }
+
+      expect(_xfFieldToProperty(typesByName, field)).toEqual(expected)
+    })
+  })
+
   describe('transforming aggregates', () => {
     it('transforms LISTs', () => {
       const field = {
@@ -211,7 +242,7 @@ describe('_xfFieldToProperty', () => {
 
 describe('rxSchemaFromIntrospection', () => {
   it('converts graphql introspection to correctly formatted rxschema 1', () => {
-    const rxSchema = rxSchemaFromIntrospection(introspection)
+    const rxSchema = rxSchemaFromIntrospection(jobsIntrospection)
 
     const expected = {
       "type": "object",
@@ -243,7 +274,7 @@ describe('rxSchemaFromIntrospection', () => {
   })
 
   it('converts graphql introspection to correctly formatted rxschema 2', () => {
-    const rxSchema = rxSchemaFromIntrospection(introspection)
+    const rxSchema = rxSchemaFromIntrospection(jobsIntrospection)
     const expected = {
       "type": "object",
       "properties": {
