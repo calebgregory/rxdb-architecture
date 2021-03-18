@@ -28,8 +28,8 @@ export async function getJob(id: string) {
     return
   }
 
-  const { job } = resp.data.getJob
+  const job = stripGqlFields(resp.data.getJob.job)
   log.debug('getJob - got job; inserting', { job })
 
-  await eph().jobs.insert(stripGqlFields(job))
+  await eph().jobs.atomicUpsert(job)
 }
