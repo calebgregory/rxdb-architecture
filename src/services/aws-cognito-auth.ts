@@ -86,7 +86,7 @@ export function resendConfirmationCode(username: string) {
         log.warning('resendConfirmationCode - error resending confirmation code', { error })
         return reject(error)
       }
-      log.info('resendConfirmationCode - successfully resent confirmation code', { result });
+      log.info('resendConfirmationCode - successfully resent confirmation code', { result })
       resolve(true)
     })
   })
