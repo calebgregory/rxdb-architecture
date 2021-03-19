@@ -13,23 +13,19 @@ const jobsSchema = mergeDeepRight(
   YAML.parse(raw('~/src/db/schema/jobs.yml')),
 )
 
-const viewSchema = YAML.parse(raw('~/src/db/schema/view.yml'))
+const contentSchema = mergeDeepRight(
+  require('~/src/db/schema/__generated__/content.rxschema.json').definitions.Content,
+  YAML.parse(raw('~/src/db/schema/content.yml')),
+)
 
 // persistent database
 
 export async function createDB() {
-  const db = await createRxDatabase({
-    name: '/db',
-    adapter: 'idb',
-  })
+  const db = await createRxDatabase({ name: 'db', adapter: 'idb' })
 
   await db.addCollections({
-    jobs: {
-      schema: jobsSchema,
-    },
-    content: {
-      schema: require('./schema/content.json')
-    },
+    jobs: { schema: jobsSchema },
+    content: { schema: contentSchema },
   })
 
   return db
@@ -38,22 +34,12 @@ export async function createDB() {
 // ephemeral database
 
 export async function createEphemeralDB() {
-  const eph = await createRxDatabase({
-    name: '/eph',
-    adapter: 'memory'
-  })
+  const eph = await createRxDatabase({ name: 'eph', adapter: 'memory' })
 
   await eph.addCollections({
-    jobs: {
-      schema: jobsSchema,
-    },
-    content: {
-      schema: require('./schema/content.json')
-    },
-    view: {
-      schema: viewSchema,
-    },
-  })
+    jobs: { schema: jobsSchema },
+    content: { schema: contentSchema },
+   })
 
   return eph
 }
