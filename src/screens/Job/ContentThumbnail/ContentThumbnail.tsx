@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { useObservableState } from 'observable-hooks'
 import { app } from '~/src/app'
-import { getContent } from '~/src/actions/content/get'
+import { getContent } from '~/src/query/content/get'
 
 interface Props {
   id: string

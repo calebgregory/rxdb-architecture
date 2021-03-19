@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import { useObservableState } from 'observable-hooks'
 import { app } from '~/src/app'
-import { getJob } from '~/src/actions/jobs/get'
+import { getJob } from '~/src/query/jobs/get'
 import { getJobTitle } from '~/src/util/jobs'
 import { ContentThumbnail } from './ContentThumbnail'
 

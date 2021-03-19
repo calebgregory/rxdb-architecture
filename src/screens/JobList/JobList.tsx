@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { useObservableState } from 'observable-hooks'
 import { app } from '~/src/app'
-import { listJobs } from '~/src/actions/jobs/list'
+import { listJobs } from '~/src/query/jobs/list'
 import { getJobTitle } from '~/src/util/jobs'
 
 export function JobList() {
