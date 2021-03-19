@@ -4,6 +4,7 @@ import { useObservableState } from 'observable-hooks'
 import { app } from '~/src/app'
 import { getJob } from '~/src/actions/jobs/get'
 import { getJobTitle } from '~/src/util/jobs'
+import { ContentThumbnail } from './ContentThumbnail'
 
 type Params = {
   id: string
@@ -32,9 +33,7 @@ export function Job() {
             <div>
               {step.documentation.map((doc: any) => {
                 const key = `${job.id}.${step.name}.${doc.contentID}`
-                return <div key={key} id={key}>
-                  <h5>- {doc.contentID}</h5>
-                </div>
+                return <ContentThumbnail key={key} id={doc.contentID} />
                })}
             </div>
           </div>

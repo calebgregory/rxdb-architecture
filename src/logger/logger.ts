@@ -1,6 +1,6 @@
 import debug from 'debug'
 
-debug.enable('*')
+debug.enable('*,-*.trace')
 
 const LEVELS = ['info', 'debug', 'trace', 'warning', 'error']
 

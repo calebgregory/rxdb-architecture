@@ -1,4 +1,4 @@
-export function id(prefix: string = 'id') {
+export function id(prefix: string = 'id'): string {
   return `${prefix}-${Date.now()}-${(Math.random() * 1000000).toPrecision(6)}`
 }
 

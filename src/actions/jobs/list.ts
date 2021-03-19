@@ -1,10 +1,7 @@
 import { gql } from '@urql/core'
-import map from 'ramda/src/map'
-import partition from 'ramda/src/partition'
-import pipe from 'ramda/src/pipe'
 import { app } from '~/src/app'
-import { stripGqlFields } from '~/src/util/gql'
 import { Job } from '~/src/gql/fragments/jobs'
+import { bulkPut } from '~/src/util/rxdb/bulk-put'
 
 const log = require('~/src/logger').logger('actions/jobs/list')
 
@@ -36,18 +33,5 @@ export async function listJobs() {
   const { items } = resp.data.listJobs.jobConnection
   log.debug('listJobs - got jobs; inserting', { 'items.length': items.length })
 
-  const ids = items.map((j: any) => j.id)
-  const jobsAlreadyInEphById = await eph().jobs.findByIds(ids)
-  const [jobsToUpsert, jobsToInsert] = pipe(
-    map(stripGqlFields),
-    partition(j => jobsAlreadyInEphById.has(j.id))
-  )(items)
-
-  await Promise.all([
-    // https://rxdb.info/rx-collection.html#atomicupsert; sadly no batch
-    // operation available
-    ...jobsToUpsert.map(job => eph().jobs.atomicUpsert(job)),
-    // https://rxdb.info/rx-collection.html#bulkinsert
-    eph().jobs.bulkInsert(jobsToInsert)
-  ])
+  await bulkPut(eph().jobs, items)
 }

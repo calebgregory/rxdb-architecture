@@ -39,7 +39,7 @@ export async function createEphemeralDB() {
   await eph.addCollections({
     jobs: { schema: jobsSchema },
     content: { schema: contentSchema },
-   })
+  })
 
   return eph
 }
