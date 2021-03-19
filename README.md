@@ -6,24 +6,16 @@
 
 You'll need
 
-- `.env` file with `export AUTH_TOKEN=<your-xoi-token>` (make sure it's valid)
-- `config.json` in repo root, pointing to the appropriate environment
-- ,-o-o eventually, you'll need a `.yarnrc` pointing to the npm repo on "the nexus" (you know the one)
+- a `config.json` pointing to some env (i point to `devl` personally)
+- a `credentials.json` containing an object `{username, password}` with valid credentials for that environment.
 
-You should be able to `yarn main` at that point and use this thing.
-
-### View logs
-
-Open [localhost:3000](http://localhost:3000) in your browser and crack open the console.  You'll see pretty logs that can be easily filtered and searched.  We are very proud.
-
-### Example commands
+At that point, you can
 
 ```sh
-show job job-29cebec6-7a7a-i144-1a9d4ed3a691-u7BD-9b3b53b43b4f
-show job job-f133153a-7a7a-an28-023f408d85c5-u849-f04c3160cb02
+yarn
+yarn gen
+yarn start
 ```
-
---
 
 ## The idea here
 
@@ -33,16 +25,16 @@ view-layer.
 The proposed architecture looks like this:
 
 - A persistent data store (in rxdb), which houses a model of a graphql server
-  - We persist items and pending mutations on items, grouped by `id`.
+- We persist items (copies of the resource fetched from the server) and
+  pending mutations of these items, grouped by `id`.
 - Additionally, there is an ephemeral data store (in rxdb, with an
   in-memory adapter), which houses "optimistically-updated" items,
-  reduced from the server-item with its applied pending mutations.
+  reduced from the server-item with its pending mutations applied "onto" it.
 - The view layer can query and subscribe-to-changes-on-items in the
   ephemeral store
-- The view is represented as data in an ephemeral store; the UI merely
-  maps that data into a view.
-- Any 'action' a user can perform is encoded as a process encapsulated
-  by a function, which can be called in any context.
+- Any 'action' a user can perform (such as "querying" or "mutating") is
+  encoded as a process encapsulated by a function, which can be called in any
+  context.
 
 --
 
@@ -67,6 +59,7 @@ Links
 
 ## TODO
 
-1. experiment with Component-level join (more closely resembles what you'd do with React)
-2. experiment with model-layer usage
-3. add authentication
+1. ~experiment with Component-level join (more closely resembles what you'd do with React)~
+2. add a resource Mutation
+3. experiment with model-layer usage
+4. add authentication
