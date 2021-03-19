@@ -1,0 +1,448 @@
+type Query {
+  # Retrieves multiple pieces of Content at once.
+  # The client must handle making sure that the batch sizes are reasonable
+  # so as not to go over the 1MB AppSync response payload limit.
+  # Content that does not exist will not cause errors, so it is recommended
+  # that you compare the IDs in the responses to the IDs you queried for
+  # if you want to know about any Content that was not found.
+  getContent(contentIDs: [ID!]!, requestInput: GetContentInput): [Content!]!
+  getExactMatchValues: ExactMatchResults
+
+  getDocPredictions(input: GetDocPredictionsInput!): GetDocPredictionsResult!
+
+  getKnowledgebaseQuerySuggestions(
+    input: PartialQueryInput!
+  ): QuerySuggestionsResult!
+
+  searchKnowledgebaseContent(
+    search: String
+    limit: Int
+    nextToken: String
+    exactMatchFilters: ExactMatchFilters
+    kbCollectionIds: [ID!]
+  ): SearchConnection!
+
+  # This should not be used to determine whether an upload is complete.
+  # for that, use startContentUpload itself
+  claimUploadParts(input: MultipartClaim!): MultipartGrant!
+
+  verifyUserUploads(input: UploadVerificationInput!): UploadVerificationResult!
+}
+
+type Mutation {
+  # this requires a connection - an optimistic response is meaningless
+  # it is also functionally idempotent - a reupload should work just as well as the original upload
+  startContentUpload(input: StartContentUploadInput!): ContentUploader!
+
+  # no true return - this is to make GraphQL happy
+  reportContentUploadEvent(event: ContentUploadEvent!): Boolean
+  createKnowledgebaseContent(
+    inputs: [CreateKnowledgebaseContentInput!]!
+  ): [CreateKnowledgebaseContentResponse!]!
+  updateKnowledgebaseContent(
+    inputs: [UpdateKnowledgebaseContentInput!]!
+  ): [UpdateKnowledgebaseContentResponse!]!
+}
+
+type DocPrediction {
+  id: ID!
+  predictedFromContentId: ID!
+  predictedContentIds: [ID!]
+  predictedAt: AWSDateTime
+}
+
+# INPUT TYPES
+
+input GetDocPredictionsInput {
+  docPredictionIds: [ID!]!
+}
+
+input UploadVerificationInput {
+  filesFound: [FileInfo!]!
+}
+
+input FileInfo {
+  path: String!
+  lengthBytes: Int!
+  lastModifiedMinutesAgo: Int!
+}
+
+input ExactMatchFilters {
+  contentCategories: [String!]
+  productCategories: [String!]
+  makes: [String!]
+  mediaTypes: [String!]
+}
+
+input GetContentInput {
+  requestedMediaFormats: [MediaFormatSupportStatement!]
+  # Deprecated and ignored
+  requestVbr: Boolean
+}
+
+input StartContentUploadInput {
+  # please append a normal file extension to this UUID! e.g. 'Content-a383edf9329.jpg'
+  id: ID!
+  # if you lie about this your content will never be available
+  sha256hex: String!
+  lengthBytes: Int!
+  createdAt: AWSDateTime!
+  # https://en.wikipedia.org/wiki/Media_type - aka mime type
+  mediaType: String!
+  # a device unique ID just for backend usage
+  captureDeviceId: String
+  # if you provide this as true, this will not count as an upload attempt, but simply as a 'pre-creation' for record-keeping
+  noUpload: Boolean
+  # If requestedMultipartOfferSize is missing or nonzero, the API may or may not return any ranges.
+  # The API may provide byte ranges of whatever size it deems appropriate - this is only a 'suggestion'
+  requestedMultipartOfferSize: Int
+}
+
+# note that the ID for Knowledgebase Content is created by the server
+input CreateKnowledgebaseContentInput {
+  sha256hex: String!
+  lengthBytes: Int!
+  mediaType: String!
+  document: KnowledgebaseDocumentInput!
+
+  # if not provided, will be filled in by the user identity
+  orgID: ID
+
+  # kb_collection_ids must be provided; a sane default would be the global KB Collection
+  kb_collection_ids: [ID!]!
+}
+
+input UpdateKnowledgebaseContentInput {
+  id: ID!
+  documentReplacement: KnowledgebaseDocumentInput
+  kb_collection_ids: [ID!]
+}
+
+input PartialQueryInput {
+  text: String!
+  kbCollectionIds: [ID!]
+}
+
+# OUTPUT TYPES
+
+type GetDocPredictionsResult {
+  docPredictions: [DocPrediction!]!
+}
+
+type UploadVerificationResult {
+  fileInstructions: [FileInstruction!]!
+  nextVerifyAfter: AWSDateTime
+}
+
+type FileInstruction {
+  path: String!
+  lengthBytes: Int!
+  uploadInstructions: [UploadInstruction!]!
+  mayDelete: Boolean
+  reasonToRetain: String
+}
+
+type UploadInstruction {
+  contentId: ID!
+  jobStepInfo: JobStepInfo!
+  lengthBytesMismatch: Boolean
+}
+
+type JobStepInfo {
+  jobId: ID!
+  # the name of the Step - just for the UI
+  stepName: String!
+}
+
+type CreateKnowledgebaseContentError {
+  message: String!
+}
+
+type CreateKnowledgebaseContentResponse {
+  content: Content
+  uploader: ContentUploader
+  # if this is present, something is not right
+  error: CreateKnowledgebaseContentError
+}
+
+type UpdateKnowledgebaseContentError {
+  message: String!
+}
+
+type UpdateKnowledgebaseContentResponse {
+  contentId: ID!
+  # if present, was successful
+  content: Content
+  error: UpdateKnowledgebaseContentError
+}
+
+# The pluralization here is very wonky and we apologize.  We're trying
+# match an internal schema that is the actual storage and therefore
+# what has historically been exposed via KbDynamic.
+type KnowledgebaseDocument {
+  title: String
+  make: [String!]
+  model: [String!]
+  description_short: [String!]
+  description_long: [String!]
+  product_category: [String!]
+  content_category: [String!]
+  tags: [String!]
+}
+
+input KnowledgebaseDocumentInput {
+  title: String!
+
+  make: String
+  models: [String!]
+  description_short: String
+  description_long: String
+  content_category: String
+  product_category: String
+  tags: [String!]
+}
+
+# all of these fields must be copied directly from the MultipartByteRangeOffer
+input MultipartClaimedByteRange {
+  start: Int!
+  length: Int!
+  expiresAt: AWSDateTime!
+  signature: String!
+}
+
+input MultipartContiguousByteRangeClaim {
+  md5b64: String!
+  contiguousRanges: [MultipartClaimedByteRange!]!
+}
+
+input MultipartClaim {
+  id: ID!
+  # for proof that you're not messing with us
+  sha256hex: String!
+  lengthBytes: Int!
+
+  rangeClaims: [MultipartContiguousByteRangeClaim!]!
+}
+
+input ContentUploadEvent {
+  id: ID!
+  at: AWSDateTime!
+
+  # generally only one of these four booleans should be true.
+  # we are not using an enum because it's possible we could later add events
+  # that require acccompanying info other than the datetime.
+  enteredFailedState: Boolean # recoverable state
+  fileNotFound: Boolean # end state
+  userRemovedContent: Boolean # end state
+  unknownFatalError: Boolean # end state
+}
+
+input MediaFormatSupportStatement {
+  mediaType: String!
+  # only subsets of these coding formats will be considered matches.
+  # E.g. Content that is [vp9, vorbis] would not be 'matched' by a
+  # statement of support for [vp9], but a statement of support for
+  # [vp9, vp8, vorbis, opus] would match that same content.
+  codingFormats: [String!]!
+}
+
+# output types
+
+type MediaFormatUrl {
+  url: String!
+  mediaType: String!
+  # contains only the coding formats contained in this particular file
+  codingFormats: [String!]!
+}
+
+type HttpCookie {
+  name: String!
+  value: String!
+}
+
+type CloudFrontResource {
+  # domain and shared path
+  resource: String!
+
+  # Signed cookies without which you will not be able to access anything.
+  # Set them with domain and path derived from url-parsing `baseUrl`.
+  cookies: [HttpCookie!]!
+  expiresAt: AWSDateTime!
+}
+
+type VbrLinks {
+  cloudFrontResource: CloudFrontResource!
+
+  # append these to the CloudFrontCookiesResource to get a full URL
+  dashPlaylistSuffix: String
+  hlsPlaylistSuffix: String
+}
+
+type ExpiringLink {
+  url: String!
+  expiresAt: AWSDateTime!
+  # is currently always a jpeg
+  thumbnailUrl: String!
+  mediaFormatUrls: [MediaFormatUrl!]!
+  # only present for videos that have VBR-transcoded versions
+  vbr: VbrLinks
+}
+
+type UnavailableInfo {
+  message: String!
+  error: Boolean!
+  verbose: String!
+}
+
+type XTurkMetadata {
+  make: String
+  model: String
+  serial: String
+  not_data_plate: Boolean
+  not_legible: Boolean
+  not_audible: Boolean
+  transcript: String
+  transcript_tags: [String!]
+}
+
+type PartialQuery {
+  text: String!
+}
+
+type CompletionSuggestions {
+  # keeping these singular because the plurality doesn't seem to add
+  # anything, and this way the names themselves don't directly overlap
+  # with most of our usage elsewhere in the APIs, where we are
+  # pluralizing because the data itself is concretely plural
+  # (e.g. this document has 5 models associated with it).
+  #
+  # you can read each of these as "[x] completion suggestions", e.g.
+  # "content category completion suggestions".
+  model: [String!]
+  title: [String!]
+  make: [String!]
+  contentCategory: [String!]
+  productCategory: [String!]
+  tags: [String!]
+}
+
+type ExactMatchFilterSuggestions {
+  make: [String!]
+  contentCategory: [String!]
+  productCategory: [String!]
+  mediaType: [String!]
+}
+
+type QuerySuggestionsResult {
+  # your input, returned - to prevent confusion about local state
+  input: PartialQuery!
+  completions: CompletionSuggestions
+  exactMatchFilters: ExactMatchFilterSuggestions
+}
+
+type Content {
+  id: ID!
+  sha256hex: String!
+  lengthBytes: Int!
+  orgID: ID!
+  group: String!
+    @deprecated(
+      reason: "Content might belong to more than one group in the future."
+    )
+
+  createdAt: AWSDateTime!
+  # https://en.wikipedia.org/wiki/Media_type - aka mime type
+  mediaType: String!
+  uploadedAt: AWSDateTime
+  uploader: String
+
+  readLink: ExpiringLink
+  # either this or readLink should be present
+  unavailableInfo: UnavailableInfo
+  # kbDynamic is a JSON object, stringified, since GraphQL doesn't support dynamic objects
+  # but we don't yet have concrete types for the things that live in the Knowledgebase.
+  knowledgebaseDynamic: AWSJSON
+    @deprecated(reason: "Use typed knowledgebaseDocument going forward")
+  # replacement for knowledgebaseDynamic
+  knowledgebaseDocument: KnowledgebaseDocument
+  # Knowledgebase Content, by definition, has a set of kb_collection_ids it belongs to
+  kb_collection_ids: [ID!]
+
+  xturk_metadata: XTurkMetadata
+  refreshMetadataAfter: AWSDateTime
+
+  summary: String
+
+  virusScan: VirusScan
+}
+
+# All statuses except INFECTED may still be accompanied by a readLink,
+# and as an enum they are (obviously) mutually exclusive.  if the
+# virus scan has not completed, none of these apply - i.e. the
+# enclosing virusScan type is nil (meaning 'no scan result has been received')
+enum VirusScanStatus {
+  INFECTED
+  TOO_LARGE
+  PASSED
+  FAILED
+}
+
+type VirusScan {
+  at: AWSDateTime!
+  status: VirusScanStatus!
+}
+
+# Uploader output types
+
+type HeaderKeyValue {
+  key: String!
+  value: String!
+}
+
+type MultipartByteRangeGrant {
+  start: Int!
+  length: Int!
+  url: String!
+  headers: [HeaderKeyValue!]!
+}
+
+type MultipartGrant {
+  id: ID!
+  rangeGrants: [MultipartByteRangeGrant!]!
+}
+
+type MultipartByteRangeOffer {
+  start: Int!
+  length: Int!
+  # these offers, like presigned URLs, are not valid indefinitely.
+  expiresAt: AWSDateTime!
+  # pass this back with your Claim so we can validate it
+  signature: String!
+}
+
+type ContentUploader {
+  id: ID!
+  # if this is true, the content is already uploaded
+  uploadComplete: Boolean!
+  uploadLink: ExpiringLink
+  # you must include these exact headers on your upload or it will not succeed
+  headers: [String!]!
+  sha256hex: String
+  lengthBytes: Int
+
+  # this may be empty even if the upload is not complete
+  nextMultipartRangeOffers: [MultipartByteRangeOffer!]!
+}
+
+type SearchConnection {
+  items: [Content!]
+  nextToken: String
+  predictedCount: Int
+}
+
+type ExactMatchResults {
+  contentCategories: [String!]!
+  productCategories: [String!]!
+  makes: [String!]!
+  mediaTypes: [String!]!
+}

@@ -30,7 +30,7 @@ function _objectTypeFromName(typesByName, typeName) {
 }
 
 function _xfTypeToPropertyType(typesByName, type, isNotNullable = false) {
-  const propertyType = ({
+  const makePropertyType = ({
     'NON_NULL': () => {
       return _xfTypeToPropertyType(typesByName, type.ofType, true) // recur
     },
@@ -49,11 +49,16 @@ function _xfTypeToPropertyType(typesByName, type, isNotNullable = false) {
         type: 'object',
         properties: _xfFieldsToProperties(typesByName, fields), // eventually recur
       }
+    },
+    'ENUM': () => {
+      return { type: 'string' }
     }
-  })[type.kind]()
-  if (!propertyType) {
+  })[type.kind]
+  if (!makePropertyType) {
     throw new Error(`no propertyType mapping configured for {${type.kind}} :(`)
   }
+
+  const propertyType = makePropertyType()
 
   if (type.kind === 'NON_NULL' || isNotNullable) {
     return propertyType

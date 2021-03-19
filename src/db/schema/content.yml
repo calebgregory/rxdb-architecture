@@ -1,0 +1,9 @@
+title: content collection schema
+version: 0
+description: schema for the Content collection
+type: "object"
+properties:
+  id:
+    primary: true
+indexes:
+  - id
