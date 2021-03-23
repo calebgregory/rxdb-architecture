@@ -64,3 +64,4 @@ Links
 2. add a resource Mutation
 3. experiment with model-layer usage
 4. add authentication
+5. generate TypeScript types from GraphQL schema

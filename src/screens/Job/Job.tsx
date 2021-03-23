@@ -2,7 +2,9 @@ import React, { useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import { useObservableState } from 'observable-hooks'
 import { app } from '~/src/app'
+import { data } from '~/src/util/rxdb/operators'
 import { getJob } from '~/src/query/jobs/get'
+import { setJobWorkflow } from '~/src/mutation/jobs/set-job-workflow'
 import { getJobTitle } from '~/src/util/jobs'
 import { ContentThumbnail } from './ContentThumbnail'
 
@@ -19,7 +21,12 @@ export function Job() {
 
   useEffect(() => { getJob(id) }, [id])
 
-  const job: any = useObservableState(app().eph().jobs.findOne().where('id').equals(id).$, null)
+  const job: any = useObservableState(
+    app().eph().jobs.findOne().where('id').equals(id).$.pipe(data()),
+    null
+  )
+
+  const handleSetWorkflowClick = () => setJobWorkflow(id)
 
   if (!job) {
     return <div>loading...</div>
@@ -30,6 +37,9 @@ export function Job() {
       <h1 id={job.id}>{getJobTitle(job)}</h1>
       <h3>Owner: <span style={{ color: 'blue' }}>{getOwnerName(job.owner_info)}</span></h3>
       <br />
+      {!Boolean(job.workflowName)
+        ? <button onClick={handleSetWorkflowClick}>Set this job's workflow!</button>
+        : null}
       <div>
         {job.steps.map((step: any) => {
           const key = `${job.id}.${step.name}`
