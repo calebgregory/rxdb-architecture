@@ -44,6 +44,7 @@ Links
 - [`rxdb`](https://rxdb.info/)
   - [JSON schema](https://json-schema.org/learn/getting-started-step-by-step)
   - [`rxdb-utils`, hooks](https://github.com/rafamel/rxdb-utils#hooks)
+  - [`mquery` methods](https://github.com/aheckmann/mquery/blob/master/README.md)
 - [`observable-hooks`](https://github.com/crimx/observable-hooks/blob/master/docs/api/README.md#useobservablestate)
 - CLI display
   - [`vorpal`](https://github.com/dthree/vorpal/)

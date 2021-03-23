@@ -3,7 +3,7 @@ import { app } from '~/src/app'
 import { Job } from '~/src/gql/fragments/jobs'
 import { bulkPut } from '~/src/util/rxdb/bulk-put'
 
-const log = require('~/src/logger').logger('actions/jobs/list')
+const log = require('~/src/logger').logger('query/jobs/list')
 
 export const ListJobs = gql`
   query ListJobs($input: ListJobsInput) {

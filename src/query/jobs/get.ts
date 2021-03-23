@@ -3,7 +3,7 @@ import { app } from '~/src/app'
 import { stripGqlFields } from '~/src/util/gql'
 import { Job } from '~/src/gql/fragments/jobs'
 
-const log = require('~/src/logger').logger('actions/jobs/get')
+const log = require('~/src/logger').logger('query/jobs/get')
 
 export const GetJob = gql`
   query GetJob($id: ID!) {
