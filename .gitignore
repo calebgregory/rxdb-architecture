@@ -112,6 +112,7 @@ dist
 
 # Custom
 config.json
-credentials.json
-dev/
+*credentials.json
+test-db/
 __generated__/
+LOGCONFIG.js

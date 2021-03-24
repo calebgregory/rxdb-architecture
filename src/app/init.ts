@@ -18,7 +18,7 @@ const getUrl = (apiName: string): string => {
 
 // create gql clients
 
-function initGQLClients(session: CognitoUserSession) {
+export function initGQLClients(session: CognitoUserSession) {
   const _createClient = (apiName: string) => createClient({
     url: getUrl(apiName),
     fetchOptions: () => {
