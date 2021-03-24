@@ -2,6 +2,7 @@ import { CognitoUserSession } from 'amazon-cognito-identity-js'
 import { createClient } from '@urql/core'
 import { createDB, createEphemeralDB } from '~/src/db'
 import { authenticateUser, Credentials } from '~/src/services/aws-cognito-auth'
+import { init as initLogger } from '~/src/logger/init'
 import config from '~/config.json'
 
 const log = require('~/src/logger').logger('app/init')
@@ -37,6 +38,8 @@ export function initGQLClients(session: CognitoUserSession) {
 // init
 
 export async function init(credentials: Credentials) {
+  initLogger()
+
   const session = await authenticateUser(credentials)
   log.debug('authenticated user; got session', { session })
 

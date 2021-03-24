@@ -1,4 +1,4 @@
-import { parseLogConfig } from '../logger'
+import { parseLogConfig } from '../init'
 
 describe('parseLogConfig', () => {
   test.each([

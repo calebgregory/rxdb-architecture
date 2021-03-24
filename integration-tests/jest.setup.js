@@ -1,6 +1,6 @@
 const path = require('path')
 const debug = require('debug')
-const { parseLogConfig } = require('~/src/logger/logger')
+const { parseLogConfig } = require('~/src/logger/init')
 
 const log = debug('jest.setup.js')
 
