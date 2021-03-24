@@ -16,6 +16,12 @@ import { map } from 'rxjs/operators'
  * sure _why_, but when using rxDoc.toJSON() (see below), I was seeing
  * recursive-type behavior on the Observable. So... use rxDox._data.
  */
-export function data<T>(): OperatorFunction<RxDocument<T>, { [key: string]: any }> {
-  return map((rxDoc: RxDocument<T>) => rxDoc && rxDoc._data)
+export function data<DT, TT>(): OperatorFunction<RxDocument<DT>, TT | null> {
+  return map((rxDoc: RxDocument<DT>) => {
+    if (rxDoc) {
+      const d: unknown = rxDoc._data
+      return d as TT
+    }
+    return null
+  })
 }

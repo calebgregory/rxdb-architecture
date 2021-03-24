@@ -7,6 +7,7 @@ import { getJob } from '~/src/query/jobs/get'
 import { setJobWorkflow } from '~/src/mutation/jobs/set-job-workflow'
 import { getJobTitle } from '~/src/util/jobs'
 import { ContentThumbnail } from './ContentThumbnail'
+import { Job as JobT } from '~/src/gql/types/jobs'
 
 type Params = {
   id: string
@@ -21,7 +22,7 @@ export function Job() {
 
   useEffect(() => { getJob(id) }, [id])
 
-  const job: any = useObservableState(
+  const job: JobT | null = useObservableState(
     app().eph().jobs.findOne().where('id').equals(id).$.pipe(data()),
     null
   )
@@ -34,20 +35,20 @@ export function Job() {
 
   return (
     <div>
-      <h1 id={job.id}>{getJobTitle(job)}</h1>
-      <h3>Owner: <span style={{ color: 'blue' }}>{getOwnerName(job.owner_info)}</span></h3>
+      <h1 id={job!.id}>{getJobTitle(job)}</h1>
+      <h3>Owner: <span style={{ color: 'blue' }}>{getOwnerName(job!.owner_info)}</span></h3>
       <br />
-      {!Boolean(job.workflowName)
+      {!Boolean(job!.workflowName)
         ? <button onClick={handleSetWorkflowClick}>Set this job's workflow!</button>
         : null}
       <div>
-        {job.steps.map((step: any) => {
-          const key = `${job.id}.${step.name}`
+        {job!.steps.map((step: any) => {
+          const key = `${job!.id}.${step.name}`
           return <div key={key} id={key}>
             <h3>{step.name}</h3>
             <div>
               {step.documentation.map((doc: any) => {
-                const key = `${job.id}.${step.name}.${doc.contentID}`
+                const key = `${job!.id}.${step.name}.${doc.contentID}`
                 return <ContentThumbnail key={key} id={doc.contentID} />
                })}
             </div>
