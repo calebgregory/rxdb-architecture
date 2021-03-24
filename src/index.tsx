@@ -6,6 +6,7 @@ import { reportWebVitals } from '~/src/services/report-web-vitals'
 import { init } from '~/src/app/init'
 import { globalize } from '~/src/app'
 
+import config from '~/config.json'
 import credentials from '~/credentials.json'
 
 function render(Element: ReactElement) {
@@ -18,7 +19,7 @@ function render(Element: ReactElement) {
 }
 
 async function main() {
-  const app = await init(credentials)
+  const app = await init(config, credentials)
   globalize(app)
 
   render(<Root />)

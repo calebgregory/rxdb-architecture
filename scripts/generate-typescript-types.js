@@ -1,4 +1,12 @@
-/** https://www.graphql-code-generator.com/docs/getting-started/programmatic-usage */
+/**
+ * https://www.graphql-code-generator.com/docs/getting-started/programmatic-usage
+ *
+ * future resources?:
+ *   - https://github.com/graphql/graphql-js/blob/a546aca77922beb2fee949ea0ad7c9234f7006fd/docs/APIReference-TypeSystem.md
+ *   - https://graphql.org/graphql-js/utilities/#buildschema
+ *   - https://www.graphql-tools.com/docs/scalars
+ *   - https://github.com/urigo/graphql-scalars
+ */
 const fs = require('fs')
 const path = require('path')
 const { buildSchema, printSchema, parse } = require('graphql')

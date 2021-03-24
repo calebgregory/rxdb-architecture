@@ -3,13 +3,13 @@ import { createClient } from '@urql/core'
 import { createDB, createEphemeralDB } from '~/src/db'
 import { authenticateUser, Credentials } from '~/src/services/aws-cognito-auth'
 import { init as initLogger } from '~/src/logger/init'
-import config from '~/config.json'
+import { Config } from '~/config.json'
 
 const log = require('~/src/logger').logger('app/init')
 
 // config
 
-const getUrl = (apiName: string): string => {
+const getUrl = (config: Config, apiName: string): string => {
   const endpoint = config.graphqlEndpoints.find(({ name }) => name === apiName)
   if (!endpoint) {
     throw new Error(`no url found for apiName {${apiName}} in config`)
@@ -19,9 +19,9 @@ const getUrl = (apiName: string): string => {
 
 // create gql clients
 
-export function initGQLClients(session: CognitoUserSession) {
+export function initGQLClients(config: Config, session: CognitoUserSession) {
   const _createClient = (apiName: string) => createClient({
-    url: getUrl(apiName),
+    url: getUrl(config, apiName),
     fetchOptions: () => {
       // note: it is _very, very important_ that we use `idToken` here
       const token = session.getIdToken().getJwtToken()
@@ -37,7 +37,7 @@ export function initGQLClients(session: CognitoUserSession) {
 
 // init
 
-export async function init(credentials: Credentials) {
+export async function init(config: Config, credentials: Credentials) {
   initLogger()
 
   const session = await authenticateUser(credentials)
@@ -46,7 +46,7 @@ export async function init(credentials: Credentials) {
   const db = await createDB()
   const eph = await createEphemeralDB()
 
-  const gqlClients = initGQLClients(session)
+  const gqlClients = initGQLClients(config, session)
 
   const app = { db: () => db, eph: () => eph, gqlClients }
   return app
