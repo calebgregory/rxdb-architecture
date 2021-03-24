@@ -9,8 +9,8 @@ import { persistentStoreCollections, createEphemeralDB } from '~/src/db'
 import { Credentials, authenticateUser } from '~/src/services/aws-cognito-auth'
 import defaultCredentials from '~/integration-tests/test-credentials.json'
 
-
 addRxPlugin(require('pouchdb-adapter-leveldb')) // leveldown adapters need the leveldb plugin to work
+
 // persistent database
 
 const DB_DIR_PATH = path.resolve(__dirname, '../test-db')

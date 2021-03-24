@@ -1,7 +1,8 @@
 import { gql } from '@urql/core'
 import { app } from '~/src/app'
 import { Job } from '~/src/gql/fragments/jobs'
-import { stripGqlFields } from '../../util/gql'
+import { stripGqlFields } from '~/src/util/gql'
+import { NewJobInput } from '~/src/gql/types/jobs'
 
 const log = require('~/src/logger').logger('mutation/jobs/create')
 
@@ -16,9 +17,9 @@ export const CreateJob = gql`
   ${Job}
 `
 
-export async function createJob(id: string, newJobInput: any) {
+export async function createJob(id: string, newJobInput: Partial<NewJobInput>) {
   const now = new Date().toISOString()
-  const newJob = { ...newJobInput, createdAt: now, updatedAt: now }
+  const newJob: NewJobInput = { ...newJobInput, createdAt: now, updatedAt: now }
 
   const { gqlClients, eph } = app()
   const resp = await gqlClients.jobs.query(CreateJob, {

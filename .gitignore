@@ -115,4 +115,5 @@ config.json
 *credentials.json
 test-db/
 __generated__/
+src/gql/types/*.d.ts
 LOGCONFIG.js
