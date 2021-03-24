@@ -1,7 +1,8 @@
 import { gql } from '@urql/core'
 import { app } from '~/src/app'
 import { Job } from '~/src/gql/fragments/jobs'
-import { bulkPut } from '~/src/util/rxdb/bulk-put'
+import { stripGqlFields } from '~/src/util/gql'
+import { Job as JobT } from '~/src/gql/types/jobs'
 
 const log = require('~/src/logger').logger('query/jobs/list')
 
@@ -33,5 +34,5 @@ export async function listJobs() {
   const { items } = resp.data.listJobs.jobConnection
   log.debug('listJobs - got jobs; inserting', { 'items.length': items.length })
 
-  await bulkPut(eph().jobs, items)
+  await Promise.all(items.map((item: JobT) => eph().jobs.atomicUpsert(stripGqlFields(item))))
 }
