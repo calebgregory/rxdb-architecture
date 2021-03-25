@@ -116,4 +116,5 @@ config.json
 test-db/
 __generated__/
 src/gql/types/*.d.ts
+src/gql/test-fixtures/*.ts
 LOGCONFIG.js

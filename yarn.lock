@@ -1275,7 +1275,7 @@
     "@graphql-tools/utils" "^6"
     tslib "~2.0.1"
 
-"@graphql-codegen/plugin-helpers@^1.18.2", "@graphql-codegen/plugin-helpers@^1.18.3", "@graphql-codegen/plugin-helpers@^1.18.4":
+"@graphql-codegen/plugin-helpers@^1.17.8", "@graphql-codegen/plugin-helpers@^1.18.2", "@graphql-codegen/plugin-helpers@^1.18.3", "@graphql-codegen/plugin-helpers@^1.18.4":
   version "1.18.4"
   resolved "https://registry.yarnpkg.com/@graphql-codegen/plugin-helpers/-/plugin-helpers-1.18.4.tgz#0adc4c0f88386a50b7a69d358080b6ee54fc3b16"
   integrity sha512-dpfhUmn9GOS8ByoOPIN3V4Nn9HX7sl9NR7Hf26TgN6Clg7cQvkT6XjHdS2e56Q3kWrxZT1zJ1sEa67D3tj9ZtQ==
@@ -1399,6 +1399,16 @@
   integrity sha512-tAag0jEcjwH+P2quUfipd7liWCNX2F8NvYjQp2wtInsZxnMlypdw0FtAOLxtvvkO+GSRRbmNi8m/5y42PQJYCQ==
   dependencies:
     "@hapi/hoek" "^8.3.0"
+
+"@homebound/graphql-typescript-factories@^1.39.0":
+  version "1.39.0"
+  resolved "https://registry.yarnpkg.com/@homebound/graphql-typescript-factories/-/graphql-typescript-factories-1.39.0.tgz#a445930e770501d65bc2fa4a5c82b69e28c443dc"
+  integrity sha512-jmNRGgB13SyHAzuZ6hrvk5/nj76yAn3o+HuLRZDo6tNMzcJkjgQ6ZbnWhu0jkIMld0iDeeDdVp7X0/Sr6hIFvg==
+  dependencies:
+    "@graphql-codegen/plugin-helpers" "^1.17.8"
+    change-case "^4.1.1"
+    graphql "^15.3.0"
+    ts-poet "^3.2.2"
 
 "@istanbuljs/load-nyc-config@^1.0.0":
   version "1.1.0"
@@ -2090,6 +2100,11 @@
   dependencies:
     "@types/pouchdb-core" "*"
     "@types/pouchdb-find" "*"
+
+"@types/prettier@^1.19.0":
+  version "1.19.1"
+  resolved "https://registry.yarnpkg.com/@types/prettier/-/prettier-1.19.1.tgz#33509849f8e679e4add158959fdb086440e9553f"
+  integrity sha512-5qOlnZscTn4xxM5MeGXAMOsIOIKIbh9e85zJWfBRVPlRMEVawzoPhINYbRGkBZCI8LxvBe7tJCdWiarA99OZfQ==
 
 "@types/prettier@^2.0.0":
   version "2.2.2"
@@ -6293,7 +6308,7 @@ graphql-tag@^2.11.0:
   resolved "https://registry.yarnpkg.com/graphql-tag/-/graphql-tag-2.11.0.tgz#1deb53a01c46a7eb401d6cb59dec86fa1cccbffd"
   integrity sha512-VmsD5pJqWJnQZMUeRwrDhfgoyqcfwEkvtpANqcoUG8/tOLkwNgU9mzub/Mc78OJMhHjx7gfAMTxzdG43VGg3bA==
 
-graphql@^15.5.0:
+graphql@^15.3.0, graphql@^15.5.0:
   version "15.5.0"
   resolved "https://registry.yarnpkg.com/graphql/-/graphql-15.5.0.tgz#39d19494dbe69d1ea719915b578bf920344a69d5"
   integrity sha512-OmaM7y0kaK31NKG31q4YbD2beNYa6jBBKtMFT6gLYJljHLJr42IqJ8KX08u3Li/0ifzTU5HjmoOOrwa5BRLeDA==
@@ -10540,6 +10555,11 @@ prepend-http@^1.0.0:
   resolved "https://nexus.ci.xoeye.com/repository/npm-group/prepend-http/-/prepend-http-1.0.4.tgz#d4f4562b0ce3696e41ac52d0e002e57a635dc6dc"
   integrity sha1-1PRWKwzjaW5BrFLQ4ALlemNdxtw=
 
+prettier@^2.0.2:
+  version "2.2.1"
+  resolved "https://registry.yarnpkg.com/prettier/-/prettier-2.2.1.tgz#795a1a78dd52f073da0cd42b21f9c91381923ff5"
+  integrity sha512-PqyhM2yCjg/oKkFPtTGUojv7gnZAoG80ttl45O6x2Ug/rMJw4wcc9k6aaf2hibP7BGVCCM33gZoGjyvt9mm16Q==
+
 pretty-bytes@^5.3.0:
   version "5.6.0"
   resolved "https://nexus.ci.xoeye.com/repository/npm-group/pretty-bytes/-/pretty-bytes-5.6.0.tgz#356256f643804773c82f64723fe78c92c62beaeb"
@@ -12728,6 +12748,15 @@ ts-pnp@1.2.0, ts-pnp@^1.1.6:
   version "1.2.0"
   resolved "https://nexus.ci.xoeye.com/repository/npm-group/ts-pnp/-/ts-pnp-1.2.0.tgz#a500ad084b0798f1c3071af391e65912c86bca92"
   integrity sha512-csd+vJOb/gkzvcCHgTGSChYpy5f1/XKNsmvBGO4JXS+z1v2HobugDz4s1IeFXM3wZB44uczs+eazB5Q/ccdhQw==
+
+ts-poet@^3.2.2:
+  version "3.3.1"
+  resolved "https://registry.yarnpkg.com/ts-poet/-/ts-poet-3.3.1.tgz#3b0c0a4f9f7d8dfb9a45004408e0f55f2b64e69f"
+  integrity sha512-ocmsSt4FG4iEV2O9bXmP5l00LbRHm9pjEJanmPh9pTB+estl2C1GXd+tPYg6NNGa0aC7VUbvs/WFF/z0lSXpuw==
+  dependencies:
+    "@types/prettier" "^1.19.0"
+    lodash "^4.17.15"
+    prettier "^2.0.2"
 
 ts-toolbelt@^6.15.1:
   version "6.15.5"

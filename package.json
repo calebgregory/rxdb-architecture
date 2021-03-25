@@ -35,9 +35,10 @@
     "test:unit": "react-scripts test src",
     "test:integration": "./node_modules/.bin/jest --config ./integration-tests/jest.config.js --setupFilesAfterEnv './jest.setup.js' --detectOpenHandles integration-tests",
     "eject": "react-scripts eject",
-    "gen": "yarn gen:rxdb; yarn gen:ts",
-    "gen:rxdb": "node ./scripts/generate-json-schema.js",
-    "gen:ts": "node ./scripts/generate-typescript-types.js",
+    "gen": "yarn gen:rxdb; yarn gen:ts; yarn gen:test-fixtures",
+    "gen:rxdb": "node ./scripts/generate-from-gql-schema.js rxschema",
+    "gen:ts": "node ./scripts/generate-from-gql-schema.js ts",
+    "gen:test-fixtures": "node ./scripts/generate-from-gql-schema.js test-fixtures",
     "postinstall": "postinstall"
   },
   "postinstall": {
@@ -46,6 +47,7 @@
   "devDependencies": {
     "@graphql-codegen/core": "^1.17.9",
     "@graphql-codegen/typescript": "^1.21.1",
+    "@homebound/graphql-typescript-factories": "^1.39.0",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",

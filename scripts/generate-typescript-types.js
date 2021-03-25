@@ -12,39 +12,46 @@ const path = require('path')
 const { buildSchema, printSchema, parse } = require('graphql')
 const { codegen } = require('@graphql-codegen/core')
 
-const debug = require('debug')
-const log = debug('[xf]')
-debug.enable('*')
+const log = require('debug')('[xf]')
 
-const srcDir = path.resolve(__dirname, '../app-sync-schema')
-const destDir = path.resolve(__dirname, '../src/gql/types')
-
-function init() {
-  if (!fs.existsSync(destDir)) {
-    fs.mkdirSync(destDir)
-  }
-}
-
-const CONFIG = {
+const TYPESCRIPT_TYPES_CONFIG = {
   plugins: [
     {
       typescript: {
-        immutableTypes: true,
+        immutableTypes: false, // we'd like this to be true, but they are incompatible with our test fixtures
         skipTypename: true,
       }
-    }
+    },
   ],
   pluginMap: {
     typescript: require('@graphql-codegen/typescript'),
   }
 }
 
-function xfToTypescriptTypes(filename, sourceDocument) {
+const TEST_FIXTURES_CONFIG = {
+  plugins: [
+    {
+      typescript: {
+        immutableTypes: false,
+        skipTypename: true,
+      }
+    },
+    {
+      '@homebound/graphql-typescript-factories': {}
+    }
+  ],
+  pluginMap: {
+    typescript: require('@graphql-codegen/typescript'),
+    '@homebound/graphql-typescript-factories': require('@homebound/graphql-typescript-factories'),
+  }
+}
+
+function xfToTypescriptTypes(baseConfig, filename, sourceDocument) {
   // graphql-lib does not know how to parse AWSDateTime or AWSJSON :(
   const schema = buildSchema(sourceDocument.replace(/(AWSDateTime|AWSJSON)/g, 'String'))
 
   const config = {
-    ...CONFIG,
+    ...baseConfig,
     filename,
     schema: parse(printSchema(schema)),
   }
@@ -52,27 +59,22 @@ function xfToTypescriptTypes(filename, sourceDocument) {
   return codegen(config)
 }
 
-async function generateTypescriptTypes(file) {
-  const srcPath = path.join(srcDir, file)
-  const destPath = path.join(destDir, file.replace(/schema\.graphql/, 'd.ts'))
+function makeGenerator(baseConfig, ext) {
+  return async (srcDir, destDir, file) => {
+    const srcPath = path.join(srcDir, file)
+    const destPath = path.join(destDir, file.replace(/schema\.graphql/, ext))
 
-  log('->', srcPath)
-  const sourceDocument = fs.readFileSync(srcPath, 'utf8')
+    log('->', srcPath)
+    const sourceDocument = fs.readFileSync(srcPath, 'utf8')
 
-  const generated = await xfToTypescriptTypes(destPath, sourceDocument)
+    const generated = await xfToTypescriptTypes(baseConfig, destPath, sourceDocument)
 
-  fs.writeFileSync(destPath, generated)
-  log('<-', destPath)
-  return
+    fs.writeFileSync(destPath, generated)
+    log('<-', destPath)
+
+    log('done')
+  }
 }
 
-(function main() {
-  init()
-
-  const schemaFiles = fs.readdirSync(srcDir)
-  for (const file of schemaFiles) {
-    generateTypescriptTypes(file)
-  }
-
-  log('done')
-})()
+module.exports.generateTypescriptTypes = makeGenerator(TYPESCRIPT_TYPES_CONFIG, 'd.ts')
+module.exports.generateTestFixtures = makeGenerator(TEST_FIXTURES_CONFIG, 'ts')
