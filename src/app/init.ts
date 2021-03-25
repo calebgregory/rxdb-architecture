@@ -22,6 +22,7 @@ const getUrl = (config: Config, apiName: string): string => {
 export function initGQLClients(config: Config, session: CognitoUserSession) {
   const _createClient = (apiName: string) => createClient({
     url: getUrl(config, apiName),
+    requestPolicy: 'network-only', // we don't rely on urql's cache at all
     fetchOptions: () => {
       // note: it is _very, very important_ that we use `idToken` here
       const token = session.getIdToken().getJwtToken()
