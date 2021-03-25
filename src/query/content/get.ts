@@ -8,6 +8,7 @@ import { Content as ContentT } from '~/src/gql/types/content'
 const log = require('~/src/logger').logger('actions/content/get')
 
 const BATCH_THROTTLE_DURATION = 175
+// const MAX_BATCH_SIZE = 50  <- @todo
 
 export const ContentJob = gql`
   query GetContent($ids: [ID!]!) {
@@ -18,11 +19,20 @@ export const ContentJob = gql`
   ${Content}
 `
 
+/**
+ * @todo:
+ *   - [ ] readLink expiry
+ *   - [ ] refreshMetadataAfter
+ *   - [ ] shouldForceRefresh
+ *   - [ ] setting cookies for VBR videos
+ *   - [ ] refetching unavailable content
+ *   - [ ] max batch size
+ */
+
 let _batchGetContentRef = { current: null, id: '' }
 const addContentIdToBatch = addToBatch.bind(null, batchGetContent, BATCH_THROTTLE_DURATION, _batchGetContentRef)
 export const getContent = (id: string) => addContentIdToBatch(id)
 
-/** @todo prevent querying content that is already cached */
 export async function batchGetContent(ids: string[]) {
   const { eph, gqlClients } = app()
 
