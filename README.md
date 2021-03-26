@@ -17,6 +17,32 @@ yarn gen
 yarn start
 ```
 
+## TODO
+
+- ~select and create a network-only GraphQL client~
+  - ~use client to query / mutate data~
+- ~setup and use an RxDB instance~
+  - ~in memory~
+  - ~persistent~
+- ~organize app as singleton instance, globally importable by app~
+- ~enable configuration of environment (APIs) and credentials, for authenticated use of APIs~
+- ~query and subscribe to data in RxDB and generate views from these data; use react-router to create Screens~
+  - ~JobList~
+  - ~Job~
+  - ~Content~
+- ~demonstrate organization of app components in directory structure~
+- ~setup integration test bed for application code~
+- ~demonstrate unit tests of RxJs operators~
+- ~write an integration test for an 'imperative shell' (e.g., 'query and cache a Job')~
+- ~generate RxSchema types from GraphQL schema~
+- ~generate TypeScript types from GraphQL schema~
+- ~generate test fixture factories from GraphQL schema~
+- ~implement throttled batch-get of a given resource~
+- add max-batch-size to batch-bufferer
+- implement knowledgebase search
+- add sign-in page, demonstrate app architecture with auth/not auth delineation
+- implement model-layer for persistent, offline-first mutations of resources
+
 ## The idea here
 
 We are able to architect a front-end application independently from its
@@ -40,7 +66,7 @@ The proposed architecture looks like this:
 
 #### 1. Source of truth
 
-You probably already understand this one.  In an eventually-consistent system, the source of truth takes precedence given any two versions of an item.  Depending on the situation, one item or the other may be considered the 'source of truth'.
+You probably already understand this one.  In an eventually-consistent system, the source of truth takes precedence given any two items sharing an identifying attribute.  Depending on the situation, one item or the other may be considered the 'source of truth'.
 
 ### Constraints
 
@@ -108,11 +134,3 @@ TODO: write up a document on how to apply the functional core / imperative shell
 ## Anticipated Challenges
 
 - [Front End DB migrations](https://rxdb.info/questions-answers.html)
-
-## TODO
-
-1. write an integration test for each 'imperative shell'
-2. ~generate TypeScript types from GraphQL schema~
-3. implement knowledgebase search
-4. add authentication
-5. experiment with model-layer usage
