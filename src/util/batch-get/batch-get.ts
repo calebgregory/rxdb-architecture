@@ -7,12 +7,17 @@ const log = require('~/src/logger').logger('util/batch-get')
 
 type BatchRef = {
   current: Subject<string> | null,
-  id: string,
+  id?: string,
 }
 
-function makeThrottledBufferer(func: (ids: string[]) => any, throttleDuration: number, refID: string): Subject<string> {
+function makeThrottledBufferer(
+  func: (ids: string[]) => any,
+  throttleDuration: number,
+  maxBatchSize: number,
+  refID: string
+): Subject<string> {
   const id$ = new Subject<string>()
-  id$.pipe(throttledBuffer(throttleDuration), take(1))
+  id$.pipe(throttledBuffer(throttleDuration, maxBatchSize), take(1))
     .subscribe((ids: string[]) => {
       log.trace('calling func with ids', { ids, refID })
       func(ids)
@@ -21,10 +26,16 @@ function makeThrottledBufferer(func: (ids: string[]) => any, throttleDuration: n
   return id$
 }
 
-export function addToBatch(func: (ids: string[]) => any, throttleDuration: number, ref: BatchRef, id: string) {
+export function addToBatch(
+  func: (ids: string[]) => any,
+  throttleDuration: number,
+  maxBatchSize: number,
+  ref: BatchRef,
+  id: string
+) {
   if (!ref.current || ref.current.isStopped) {
     const refID = gid('ref')
-    ref.current = makeThrottledBufferer(func, throttleDuration, refID)
+    ref.current = makeThrottledBufferer(func, throttleDuration, maxBatchSize, refID)
     ref.id = refID
   }
 

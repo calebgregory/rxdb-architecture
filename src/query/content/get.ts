@@ -14,11 +14,11 @@ const log = require('~/src/logger').logger('query/content/get')
  *   - [x] shouldForceRefresh
  *   - [x] refetching unavailable content
  *   - [ ] setting cookies for VBR videos
- *   - [ ] max batch size
+ *   - [x] max batch size
  */
 
 const BATCH_THROTTLE_DURATION_MS = 175
-// const MAX_BATCH_SIZE = 50
+const MAX_BATCH_SIZE = 50
 const CLEANUP_BUFFER_MS = 10 * 1000
 
 export const ContentJob = gql`
@@ -33,7 +33,7 @@ export const ContentJob = gql`
 type GetShouldForceRefetch = (cachedContent: Content) => boolean
 
 let _batchGetContentRef = { current: null, id: '' }
-const addContentIdToBatch = addToBatch.bind(null, batchGetContent, BATCH_THROTTLE_DURATION_MS, _batchGetContentRef)
+const addContentIdToBatch = addToBatch.bind(null, batchGetContent, BATCH_THROTTLE_DURATION_MS, MAX_BATCH_SIZE, _batchGetContentRef)
 export const getContent = async (
   id: string,
   getShouldForceRefetch: GetShouldForceRefetch = () => false,
