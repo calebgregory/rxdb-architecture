@@ -5,7 +5,7 @@ import { Content as ContentF } from '~/src/gql/fragments/content'
 import { stripGqlFields } from '~/src/util/gql'
 import { Content } from '~/src/gql/types/content'
 
-const log = require('~/src/logger').logger('actions/content/get')
+const log = require('~/src/logger').logger('query/content/get')
 
 /**
  * @todo:
@@ -17,9 +17,9 @@ const log = require('~/src/logger').logger('actions/content/get')
  *   - [ ] max batch size
  */
 
-const BATCH_THROTTLE_DURATION = 175
+const BATCH_THROTTLE_DURATION_MS = 175
 // const MAX_BATCH_SIZE = 50
-const CLEANUP_BUFFER_MILLISECONDS = 10 * 1000
+const CLEANUP_BUFFER_MS = 10 * 1000
 
 export const ContentJob = gql`
   query GetContent($ids: [ID!]!) {
@@ -33,7 +33,7 @@ export const ContentJob = gql`
 type GetShouldForceRefetch = (cachedContent: Content) => boolean
 
 let _batchGetContentRef = { current: null, id: '' }
-const addContentIdToBatch = addToBatch.bind(null, batchGetContent, BATCH_THROTTLE_DURATION, _batchGetContentRef)
+const addContentIdToBatch = addToBatch.bind(null, batchGetContent, BATCH_THROTTLE_DURATION_MS, _batchGetContentRef)
 export const getContent = async (
   id: string,
   getShouldForceRefetch: GetShouldForceRefetch = () => false,
@@ -41,7 +41,7 @@ export const getContent = async (
   const { db } = app()
   const cachedContent: Content | null = await db().content.findOne().where('id').equals(id).exec()
 
-  const nowish = new Date(Date.now() + CLEANUP_BUFFER_MILLISECONDS)
+  const nowish = new Date(Date.now() + CLEANUP_BUFFER_MS)
   if (getShouldFetchContentId(getShouldForceRefetch, nowish, cachedContent)) {
     addContentIdToBatch(id)
   }
