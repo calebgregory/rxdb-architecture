@@ -38,6 +38,9 @@ yarn start
 - ~generate TypeScript types from GraphQL schema~
 - ~generate test fixture factories from GraphQL schema~
 - ~implement throttled batch-get of a given resource~
+- document high level components, technologies, with links to resources for further reading
+- authentication as not a strict gate
+- demonstrate a view with multiple queries
 - add max-batch-size to batch-bufferer
 - implement knowledgebase search
 - add sign-in page, demonstrate app architecture with auth/not auth delineation

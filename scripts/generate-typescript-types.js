@@ -30,6 +30,9 @@ const TYPESCRIPT_TYPES_CONFIG = {
 
 const TEST_FIXTURES_CONFIG = {
   plugins: [
+    // i've asked the graphql-typescript-factories team to enable immutable,
+    // no-typename types. open source contribution opportunity:
+    // https://github.com/homebound-team/graphql-typescript-factories/issues/22
     {
       typescript: {
         immutableTypes: false,
