@@ -1,4 +1,4 @@
-import { getIsReadLinkExpired, getShouldRefreshMetadata } from '../content'
+import { getIsReadLinkExpired, getShouldRefreshMetadata } from '../get'
 import { newContent, newExpiringLink } from '~/src/gql/test-fixtures/content'
 import { id as gid } from '~/src/util/testing'
 
@@ -20,7 +20,7 @@ describe('getIsReadLinkExpired', () => {
     expect(getIsReadLinkExpired(content, currentTime)).toEqual(true)
   })
 
-  it('returns false if readLink.expiresAt comes before currentTime', () => {
+  it('returns false if readLink.expiresAt is after currentTime', () => {
     const id = `content-${gid()}.jpg`
     const expiresAt =            '2021-01-01T00:00:00.000Z'
     const currentTime = new Date('2020-01-01T00:00:00.000Z')

@@ -13,7 +13,7 @@ export function ContentThumbnail({ id }: Props) {
   useEffect(() => { getContent(id) }, [id])
 
   const content: Content | null = useObservableState(
-    app().eph().content.findOne().where('id').equals(id).$.pipe(data()),
+    app().db().content.findOne().where('id').equals(id).$.pipe(data()),
     null
   )
 

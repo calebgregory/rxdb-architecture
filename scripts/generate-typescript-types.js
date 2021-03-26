@@ -33,7 +33,7 @@ const TEST_FIXTURES_CONFIG = {
     {
       typescript: {
         immutableTypes: false,
-        skipTypename: true,
+        skipTypename: false,
       }
     },
     {
