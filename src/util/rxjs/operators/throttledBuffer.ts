@@ -1,9 +1,9 @@
-import { interval, race, Observable, OperatorFunction, Subject } from 'rxjs'
-import { buffer, switchMap, skip, share, take } from 'rxjs/operators'
+import { of, race, Observable, OperatorFunction, Subject } from 'rxjs'
+import { buffer, delay, switchMap, skip, share, take } from 'rxjs/operators'
 
 function makeBufferCtrl$<T>(throttleDuration: number, maxBufferSize: number, src$$: Observable<T>) {
   const makeBoundedTimer$ = () => {
-    const durationHit$ = interval(throttleDuration).pipe(take(1))
+    const durationHit$ = of(1).pipe(delay(throttleDuration))
     const maxSizeHit$ = src$$.pipe(skip(maxBufferSize - 2), take(1))
     return race(durationHit$, maxSizeHit$)
   }
