@@ -4,7 +4,6 @@ import {
   Switch,
   Route,
   Redirect,
-  // Link
 } from "react-router-dom"
 import { Menu } from '~/src/components/Menu'
 import { JobList } from '~/src/screens/JobList'

@@ -7,13 +7,13 @@ import { getJob } from '~/src/query/jobs/get'
 import { setJobWorkflow } from '~/src/mutation/jobs/set-job-workflow'
 import { getJobTitle } from '~/src/util/jobs'
 import { ContentThumbnail } from './ContentThumbnail'
-import { Job as JobT } from '~/src/gql/types/jobs'
+import { Job as JobT, User } from '~/src/gql/types/jobs'
 
 type Params = {
   id: string
 }
 
-function getOwnerName({ family_name, given_name }: any): string {
+function getOwnerName({ family_name, given_name }: User): string {
   return `${given_name} ${family_name}`
 }
 
