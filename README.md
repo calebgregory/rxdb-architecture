@@ -66,6 +66,7 @@ For more info on how and what to test, see [Testing Philosophy](./docs/testing-p
 - ~generate test fixture factories from GraphQL schema~
 - ~implement throttled batch-get of a given resource~
 - document high level components, technologies, with links to resources for further reading
+- demonstrate a [data migration](https://rxdb.info/data-migration.html)
 - authentication as not a strict gate
 - demonstrate a view with multiple queries
 - document anti-patterns

@@ -2,6 +2,10 @@
 
 In order to provide an offline-first experience, we treat the client application as the source of truth for a given long-lived item. This is an inversion of what is typical - that is, treating the server as the source of truth.
 
+## Source of truth
+
+You probably already understand this one.  In an eventually-consistent system, the source of truth takes precedence given any two items sharing an identifying attribute.  Depending on the situation, one item or the other may be considered the 'source of truth'.
+
 ## The arch
 
 - A persistent data store (rxdb), which houses

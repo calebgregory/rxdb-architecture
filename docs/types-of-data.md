@@ -1,4 +1,4 @@
-# There are three types of data
+# There are three types of data a front-end application deals with
 
 ## 1. Views of items that live in a database
 
