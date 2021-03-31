@@ -1,7 +1,7 @@
 import { gql } from '@urql/core'
 import { app } from '~/src/app'
 import { Job } from '~/src/gql/fragments/jobs'
-import { stripGqlFields } from '../../util/gql'
+import { stripGqlFields } from '~/src/util/gql'
 
 const log = require('~/src/logger').logger('mutation/jobs/set-job-workflow')
 

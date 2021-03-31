@@ -1,4 +1,4 @@
-const { stripGqlFields } = require('../gql')
+import { stripGqlFields } from '../strip-gql-fields'
 
 describe('stripGqlFields', () => {
   it('recursively strips __typename and _id on objects and arrays of objects', () => {
@@ -6,5 +6,3 @@ describe('stripGqlFields', () => {
       .toEqual(require('./fixtures/stripGqlFields.output.json'))
   })
 })
-
-export {}
