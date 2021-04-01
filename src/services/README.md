@@ -4,4 +4,10 @@ Any external services that are used should be wrapped in an application interfac
 
 `aws-cognito-auth.ts` is presented here as an example of an application interface to [AWS's Cognito SDK](https://www.npmjs.com/package/amazon-cognito-identity-js).
 
-Another example of a service you might want to wrap could be a stream of Network Statuses coming from a mobile device's operating system.  You could translate that stream of statuses into an app-defined Enum, and put them into an RxDB Collection DeviceConditions that your app could in turn query and subscribe to.  This allows you to develop and test application logic that depends on knowledge about DeviceConditions without having to run on an actual device.
+Another example of a service you might want to wrap could be a stream of Network Statuses coming from a mobile device's operating system.  You could translate that stream of statuses into an app-defined Enum, and put them into an RxDB Collection `DeviceConditions` that your app could in turn query and subscribe to.  This allows you to develop and test application logic that depends on knowledge about `DeviceConditions` without having to run on an actual device.
+
+This is a very powerful abstraction.  Let me illustrate it with another example:
+
+Suppose your application logic interacts with a Device's file system.
+
+@TODO: finish this thought

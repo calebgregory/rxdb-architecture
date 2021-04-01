@@ -2,6 +2,32 @@
 
 The architecture of a 'React application' should be such that the user interface (written using the React library) is a layer of superficial tissue around a robust Javascript application.  This React-layer should be as thin as humanly possible.  Keeping this layer thin helps us avoid testing React components.  Instead, we write end-to-end tests and rely on QA to ensure that the UI is working.
 
+## Table of Contents
+
+- dependencies
+  - query/mutate data as enabled by GraphQL APIs using [network-only `urql` clients](https://formidable.com/open-source/urql/docs/basics/core/#one-off-queries-and-mutations)
+  - store and cache application data (gotten via GraphQL APis) in [`RxDB` collections](https://rxdb.info/)
+    - which expose observable queries using [`rxjs` Observables](https://rxjs.dev/guide/overview)
+    - which can be subscribed to in a React component using [`observable-hooks`](https://github.com/crimx/observable-hooks/blob/master/docs/api/README.md#useobservablestate)
+- [src](./src/)
+  - [app](./src/app/)
+  - [query](./src/query/)
+  - [services](./src/services/)
+  - [db](./src/db/)
+  - [util](./src/util/)
+    - [rxjs](./src/util/rxjs/): How to develop `rxjs` operators
+    - [rxdb](./src/util/rxdb/): Operators for transforming RxDocuments to a format usable in a React context
+  - [screens](./src/screens/)
+  - [gql types](./src/gql/types/)
+- [testing](./docs/testing.md)
+  - [gql test-fixtures](./src/gql/test-fixtures/)
+- topics
+  - [functional core / imperative shell](./docs/functional-core-imperative-shell.md)
+  - [how to write React Components](./docs/how-to-write-react-components.md)
+  - [file organization](./docs/file-organization.md)
+  - [patterns and anti-patterns](./docs/patterns-pro-and-anti.md)
+  - [state management](./docs/state-management.md)
+
 ## Getting Started With This App
 
 You'll need
@@ -35,6 +61,7 @@ For more info on how and what to test, see [Testing Philosophy](./docs/testing-p
   - [JSON schema](https://json-schema.org/learn/getting-started-step-by-step)
   - [`rxdb-utils`, hooks](https://github.com/rafamel/rxdb-utils#hooks)
   - [`mquery` methods](https://github.com/aheckmann/mquery/blob/master/README.md)
+- [`rxdb`](https://rxdb.info/)
 - [`observable-hooks`](https://github.com/crimx/observable-hooks/blob/master/docs/api/README.md#useobservablestate)
 - CLI display
   - [`vorpal`](https://github.com/dthree/vorpal/)
