@@ -2,7 +2,7 @@
 
 The architecture of a 'React application' should be such that the user interface (written using the React library) is a layer of superficial tissue around a robust Javascript application.  This React-layer should be as thin as humanly possible.  Keeping this layer thin helps us avoid testing React components.  Instead, we write end-to-end tests and rely on QA to ensure that the UI is working.
 
-## View-Layer architecture
+## Diagram of architecture
 
 ![PlantUML Diagram](http://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/calebgregory/rxdb-architecture/main/docs/architecture-overview.iuml&cache=no)
 

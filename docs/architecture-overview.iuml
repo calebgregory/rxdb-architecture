@@ -1,14 +1,13 @@
 @startuml architecture-overview
 
-card global_stores {
+card global_stores #limegreen {
   database db <<persistent>>
   storage eph <<ephemeral>>
 }
 
-card graphql_operations [
-  GraphQL Operations
+package graphql_operations #navajowhite [
   (imperative shells)
-  ---
+  ....
   get job and cache it,
   list jobs,
   batch-get contents and
@@ -16,16 +15,13 @@ card graphql_operations [
   ...
 ]
 
-card screens [
-  UI Screens
-  ---
-  query and subscribe to changes in data
-  in RxDB, render translation of data to view
-  ....
-  stateless, aside from form data
+package screens #skyblue [
+  - query and subscribe to changes in data in RxDB
+  - render translation of data to view
+  - stateless, aside from form data
 ]
 
-package services [
+package services #hotpink [
   - app interface to external APIs (many of which are env-specific)
   - expose system events as Documents in RxDB Collections
   - wrap external API methods
@@ -37,7 +33,7 @@ package services [
   ...
 ]
 
-package coordinators [
+package coordinators #lightsalmon [
   - coordinate 2 or more services
   - "hear about" system events via query-and-observation
     of RxDB Documents
@@ -46,28 +42,27 @@ package coordinators [
   ...
 ]
 
-node "<&monitor> dev's computer" as computer
-node "<&phone> device" as device
-node "GraphQL API" as gql
+node "<&monitor> dev's computer" as computer #mediumvioletred
+node "<&phone> device" as device #mediumvioletred
+node "GraphQL API" as gql #moccasin
 
-graphql_operations -left-> global_stores : "read-write"
+graphql_operations -left-> global_stores #darkgreen : "read-write"
 graphql_operations -right-> gql
 graphql_operations <-right- gql
 
-screens <-- global_stores : "read-only"
+screens <--- global_stores #blue : "read-only"
 screens -> graphql_operations : "xf : user action => fn()\ne.g., 'get job', 'set workflow'"
 screens --> services : "xf : user action => fn()\ne.g., 'open camera'"
 
-services ---> global_stores : "write-only"
+services ---> global_stores #darkseagreen : "write-only"
 computer <-up- services
 computer -up-> services
 device <-up- services
 device -up-> services
 
 coordinators -down-> services : "do I/O on device"
-global_stores <-down- coordinators : "write"
-global_stores -down-> coordinators : "observe"
+global_stores <-down- coordinators #darkseagreen : "write"
+global_stores -down-> coordinators #blue : "observe"
 graphql_operations <-down- coordinators : "query, mutate"
-
 
 @enduml
