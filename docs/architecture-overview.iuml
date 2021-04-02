@@ -1,0 +1,73 @@
+@startuml architecture-overview
+
+card global_stores {
+  database db <<persistent>>
+  storage eph <<ephemeral>>
+}
+
+card graphql_operations [
+  GraphQL Operations
+  (imperative shells)
+  ---
+  get job and cache it,
+  list jobs,
+  batch-get contents and
+  cache them
+  ...
+]
+
+card screens [
+  UI Screens
+  ---
+  query and subscribe to changes in data
+  in RxDB, render translation of data to view
+  ....
+  stateless, aside from form data
+]
+
+package services [
+  - app interface to external APIs (many of which are env-specific)
+  - expose system events as Documents in RxDB Collections
+  - wrap external API methods
+  ....
+  camera
+  file system
+  uploader
+  network connectivity
+  ...
+]
+
+package coordinators [
+  - coordinate 2 or more services
+  - "hear about" system events via query-and-observation
+    of RxDB Documents
+  ....
+  upload coordinator
+  ...
+]
+
+node "<&monitor> dev's computer" as computer
+node "<&phone> device" as device
+node "GraphQL API" as gql
+
+graphql_operations -left-> global_stores : "read-write"
+graphql_operations -right-> gql
+graphql_operations <-right- gql
+
+screens <-- global_stores : "read-only"
+screens -> graphql_operations : "xf : user action => fn()\ne.g., 'get job', 'set workflow'"
+screens --> services : "xf : user action => fn()\ne.g., 'open camera'"
+
+services ---> global_stores : "write-only"
+computer <-up- services
+computer -up-> services
+device <-up- services
+device -up-> services
+
+coordinators -down-> services : "do I/O on device"
+global_stores <-down- coordinators : "write"
+global_stores -down-> coordinators : "observe"
+graphql_operations <-down- coordinators : "query, mutate"
+
+
+@enduml
