@@ -45,7 +45,7 @@ fs.writeFile('/my/file/path', 'my content', 'utf8').then(() => {
 })
 ```
 
-Although this is hidden from you as the caller of this function, this function will write a file to the Device's file system when you are running the app on a in React-Native mobile device, and it will write a file to your computer's file system when you are running the app in Node.js on your computer.
+Although this is hidden from you as the caller of this function, this function will write a file to the Device's file system when you are running the app in React-Native on a mobile device, and it will write a file to your computer's file system when you are running the app in Node.js on your computer.
 
 Let's look closer at how this is accomplished.
 

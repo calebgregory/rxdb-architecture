@@ -78,7 +78,7 @@ It's good to wrap the `app` instance in a thunk `app()` because there is a time 
 
 Code written in a given `src/**/*` file may depend on `app()` to
 
-- [fetch data](../query/)
+- [fetch data](../gql/operations/)
 - [access cached or persisted data](../db/)
 - [cache or persist data](../db/)
 - [observe and react to system events](../services/)

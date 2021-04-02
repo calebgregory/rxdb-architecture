@@ -20,7 +20,7 @@ The architecture of a 'React application' should be such that the user interface
   - [db](./src/db/)
   - [util](./src/util/)
     - [rxjs](./src/util/rxjs/): How to develop `rxjs` operators
-    - [rxdb](./src/util/rxdb/): Operators for transforming RxDocuments to a format usable in a React context
+    - [rxdb/operators](./src/util/rxdb/operators/): Operators for transforming RxDocuments to a format usable in a React context
   - [screens](./src/screens/)
   - [gql types](./src/gql/types/)
 - [testing](./docs/testing.md)
@@ -58,19 +58,6 @@ To run integration tests, you will need to have a credentials file at `<repo-roo
 
 For more info on how and what to test, see the [testing doc](./docs/testing.md).
 
-## Links
-
-- [`urql` graphql client](https://formidable.com/open-source/urql/docs/api/core/)
-- [`rxdb`](https://rxdb.info/)
-  - [JSON schema](https://json-schema.org/learn/getting-started-step-by-step)
-  - [`rxdb-utils`, hooks](https://github.com/rafamel/rxdb-utils#hooks)
-  - [`mquery` methods](https://github.com/aheckmann/mquery/blob/master/README.md)
-- [`rxdb`](https://rxdb.info/)
-- [`observable-hooks`](https://github.com/crimx/observable-hooks/blob/master/docs/api/README.md#useobservablestate)
-- CLI display
-  - [`vorpal`](https://github.com/dthree/vorpal/)
-  - [`inquirer`](https://github.com/SBoudrias/Inquirer.js/)
-
 ## Anticipated Challenges
 
 - [Front End DB migrations](https://rxdb.info/questions-answers.html)
@@ -96,7 +83,7 @@ For more info on how and what to test, see the [testing doc](./docs/testing.md).
 - ~generate TypeScript types from GraphQL schema~
 - ~generate test fixture factories from GraphQL schema~
 - ~implement throttled batch-get of a given resource~
-- document high level components, technologies, with links to resources for further reading
+- ~document high level components, technologies, with links to resources for further reading~
 - demonstrate a [data migration](https://rxdb.info/data-migration.html)
 - authentication as not a strict gate
 - demonstrate a view with multiple queries
@@ -106,3 +93,12 @@ For more info on how and what to test, see the [testing doc](./docs/testing.md).
 - implement knowledgebase search
 - add sign-in page, demonstrate app architecture with auth/not auth delineation
 - implement model-layer for persistent, offline-first mutations of resources
+
+## Miscellany link dump
+
+- [`urql` graphql client](https://formidable.com/open-source/urql/docs/api/core/)
+- [`rxdb`](https://rxdb.info/)
+  - [JSON schema](https://json-schema.org/learn/getting-started-step-by-step)
+  - [`rxdb-utils`, hooks](https://github.com/rafamel/rxdb-utils#hooks)
+  - [`mquery` methods](https://github.com/aheckmann/mquery/blob/master/README.md)
+- [`observable-hooks`](https://github.com/crimx/observable-hooks/blob/master/docs/api/README.md#useobservablestate)
