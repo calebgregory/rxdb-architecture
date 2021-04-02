@@ -1,0 +1,47 @@
+@startuml fs-example
+
+skinparam card {
+  backgroundColor<<impl>> tomato
+  ArrowColor tomato
+}
+
+skinparam interface {
+  backgroundColor<<interface>> tomato
+  ArrowColor tomato
+}
+
+package services/ {
+  package fs/ {
+    card "node-js" as node_js_fs <<impl>>
+    card "react-native" as react_native_fs <<impl>>
+    () FileSystem <<interface>>
+  }
+}
+
+
+node "<&laptop> Apple computer" as mac {
+  card "Node.js app" {
+    () fs as node_app_fs
+    card some_function as node_app_fn
+    node_app_fn -> node_app_fs
+  }
+}
+
+node "<&phone> mobile phone" as phone {
+  card "React-Native app" {
+    () fs as react_native_app_fs
+    card some_function as react_native_app_fn
+    react_native_app_fn -> react_native_app_fs
+  }
+}
+
+mac   <-- node_js_fs
+phone <-- react_native_fs
+
+node_js_fs      <|. FileSystem : implemented by
+react_native_fs <|. FileSystem : implemented by
+
+FileSystem ... react_native_app_fs
+FileSystem ... node_app_fs
+
+@enduml

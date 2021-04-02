@@ -16,11 +16,42 @@ This is a very powerful abstraction.  Let me illustrate it with another example:
 
 ### Example: writing a file
 
-Suppose your application logic uses a device's file system.
+Suppose your application logic uses a device's file system to write a file.
 
-Developing in React-Native, you'll use `react-native-fs`.  You can afford yourself the ability to develop _your_ application code in Node.js by wrapping `fs` in an interface you define that wraps the methods on Node.js' library `fs`, and inject your dependency into your application code somehow.
+You're writing a Javascript app in React-Native, so you'll use `react-native-fs`.  Additionally, though, you can afford yourself the ability to develop your application code in Node.js by using Node.js' `fs` library.
 
-#### Application interface
+You can position yourself to be able to write _application code_ that "writes a file" without knowing exactly how, by defining an interface and two implementations of that interface:  one that that wraps the methods of `react-native-fs`, and one that wraps Node.js' library `fs`.
+
+The architecture looks like this:
+
+![PlantUML Diagram](http://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/calebgregory/rxdb-architecture/main/src/services/docs/fs-example.iuml&cache=no)
+
+Why is this valuable?  It enables you to write application code in a less complex environment than React-Native.  This helps you avoid being in a situation where you are blocked from developing your code for a couple days because you can't build the React-Native app on your device.
+
+#### Usage
+
+Let's start by looking at how you'd use `app().fs` in your application code:
+
+__Any application code you write:__
+
+```javascript
+// src/any-other-file.ts
+
+import { app } from '~/src/app'
+
+const { fs } = app()
+fs.writeFile('/my/file/path', 'my content', 'utf8').then(() => {
+  console.log('woohoo!')
+})
+```
+
+Although this is hidden from you as the caller of this function, this function will write a file to the Device's file system when you are running the app on a in React-Native mobile device, and it will write a file to your computer's file system when you are running the app in Node.js on your computer.
+
+Let's look closer at how this is accomplished.
+
+#### Define an application interface
+
+This is a collection of methods you implement with a package for each environment.
 
 ```javascript
 // src/services/fs/types.ts
@@ -36,9 +67,9 @@ interface FileReader {
 type FileSystem = FileWriter & FileReader // & ...
 ```
 
-#### React-Native implementation
+##### React-Native implementation
 
-We will use [react-native-fs' `writeFile`](https://github.com/itinance/react-native-fs/#file-creation)
+Using [react-native-fs' `writeFile`](https://github.com/itinance/react-native-fs/#file-creation),
 
 ```javascript
 // src/services/fs/react-native.ts
@@ -50,9 +81,9 @@ export function writeFile(path: string, content: string, encoding: string = 'utf
 }
 ```
 
-#### Node.js implementation
+##### Node.js implementation
 
-We will use [Node.js' `fs/promises.writeFile`](https://nodejs.org/api/fs.html#fs_fspromises_writefile_file_data_options)
+Using [Node.js' `fs/promises.writeFile`](https://nodejs.org/api/fs.html#fs_fspromises_writefile_file_data_options),
 
 ```javascript
 // src/services/fs/node-js.ts
@@ -64,7 +95,9 @@ export function writeFile(path: string, content: string, encoding: string = 'utf
 }
 ```
 
-#### In-memory mock implementation
+##### Bonus: an in-memory mock implementation
+
+For fun, I want to also show that you can implement an interface with an in-memory mock implementation.  This is often useful for writing unit tests while preserving the integration points of components defined within your application.
 
 ```javascript
 // src/services/fs/mock.ts
@@ -76,12 +109,7 @@ let fileSystem = {}
 type MockOptions = {
   shouldFail?: boolean
 }
-export function writeFile(
-  path: string,
-  content: string,
-  _encoding: string = 'utf8',
-  { shouldFail = false }: MockOptions
-): Promise<boolean> {
+export function writeFile(path: string, content: string, _encoding: string, { shouldFail = false }: MockOptions): Promise<boolean> {
   if (shouldFail) {
     throw new Error('writeFile failed')
   }
@@ -91,9 +119,11 @@ export function writeFile(
 }
 ```
 
-#### Application usage
+#### Application initialization
 
-Put a struct that implements FileWriter on the `app` singleton; this is your access to whatever device's file system with which you're engaging.
+Now, we're going to link these packages to an env-specific `app` instance.
+
+Put a struct that implements FileWriter on the `app` singleton.  This is your application's interface to whatever device's file system with which you're engaging.
 
 ```javascript
 // src/app/types.ts
@@ -107,7 +137,7 @@ interface App {
 }
 ```
 
-You'd initialize the app differently, depending on what environment you're working in:
+You will initialize `app` differently, depending on what environment you're working in:
 
 __React-Native:__
 
@@ -116,19 +146,17 @@ __React-Native:__
 
 import * as fs from '~/src/services/fs/react-native'
 
-export async function init(config: Config, credentials: Credentials) {
+export async function init(config: Config, credentials: Credentials): Promise<App> {
   // ...
-  const app = {
-    fs,
-    gqlClients,
-    db: () => db,
-    eph: () => eph,
-  }
+  const app = { fs, /* ... */ }
   return app
 }
 
 
 // src/index.tsx
+
+import { init } from '~/src/app/init'
+import { globalize } from '~/src/app/app'
 
 function main() {
   const app = await init(config, credentials)
@@ -139,8 +167,6 @@ function main() {
 
 __Node.js:__
 
-(this would look virtually the same if you were running scripts in the command line, rather than running integration-tests using `jest`, which is a workflow you will likely find yourself following frequently, since running integration tests can be slow).
-
 ```javascript
 // integration-tests/test-app.ts
 
@@ -148,12 +174,7 @@ import * as fs from '~/src/services/fs/node-js'
 
 export async function init({ credentials = defaultCredentials, config = loadConfig() }: SetupOptions = {}): Promise<App> {
   // ...
-  const app = {
-    fs,
-    gqlClients,
-    db: () => db,
-    eph: () => eph
-  }
+  const app = { fs, /* ... */ }
   return app
 }
 
@@ -176,18 +197,7 @@ describe('**/*', () => {
 })
 ```
 
-__Any application code you write:__
-
-```javascript
-// src/any-other-file-henceforth.ts
-
-import { app } from '~/src/app'
-
-const { fs } = app()
-fs.writeFile('/my/file/path', 'my content', 'utf8').then(() => {
-  console.log('woohoo!')
-})
-```
+This would look virtually the same if you were running Javascripts in the command line using Node.js or `ts-node`, rather than running integration-tests using `jest`.  I anticipate running scripts using `ts-node` is a workflow you will likely find yourself following frequently, since running integration tests can be slow.
 
 ---
 

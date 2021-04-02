@@ -38,7 +38,7 @@ export function initGQLClients(config: Config, session: CognitoUserSession) {
 
 // init
 
-export async function init(config: Config, credentials: Credentials) {
+export async function init(config: Config, credentials: Credentials): Promise<App> {
   initLogger()
 
   const session = await authenticateUser(credentials)
