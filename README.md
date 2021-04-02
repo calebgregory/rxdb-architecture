@@ -15,7 +15,7 @@ The architecture of a 'React application' should be such that the user interface
     - which can be subscribed to in a React component using [`observable-hooks`](https://github.com/crimx/observable-hooks/blob/master/docs/api/README.md#useobservablestate)
 - [src](./src/)
   - [app](./src/app/)
-  - [query](./src/query/)
+  - [GraphQL Operations](./src/gql/operations/)
   - [services](./src/services/)
   - [db](./src/db/)
   - [util](./src/util/)
@@ -56,7 +56,7 @@ yarn test:integrations
 
 To run integration tests, you will need to have a credentials file at `<repo-root>/test-credentials.json`.  This is in the same format described above (in __Getting Started__).  You can also use a `<repo-root>/test-config.json` file.  In the absense of either of these, the test suite fallsback to `<repo-root>/{credentials,config}.json`.
 
-For more info on how and what to test, see [Testing Philosophy](./docs/testing-philosophy.md).
+For more info on how and what to test, see the [testing doc](./docs/testing.md).
 
 ## Links
 

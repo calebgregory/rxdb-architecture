@@ -1,7 +1,7 @@
 import { init, destroy } from '~/integration-tests/test-app'
 import { app, globalize } from '~/src/app'
-import { getJob } from '~/src/query/jobs/get'
-import { CreateJob } from '~/src/mutation/jobs/create'
+import { getJob } from '~/src/gql/operations/jobs/get'
+import { CreateJob } from '~/src/gql/operations/jobs/create'
 import { id as gid } from '~/src/util/testing'
 import credentials from '~/integration-tests/test-credentials.json'
 

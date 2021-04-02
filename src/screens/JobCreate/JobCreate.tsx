@@ -1,6 +1,6 @@
 import React, { SyntheticEvent, useState } from 'react'
 import { useHistory } from "react-router-dom"
-import { createJob } from '~/src/mutation/jobs/create'
+import { createJob } from '~/src/gql/operations/jobs/create'
 import { id as gid } from '~/src/util/testing'
 
 export function JobCreate() {

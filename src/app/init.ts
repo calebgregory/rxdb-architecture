@@ -3,6 +3,7 @@ import { createClient } from '@urql/core'
 import { createDB, createEphemeralDB } from '~/src/db'
 import { authenticateUser, Credentials } from '~/src/services/aws-cognito-auth'
 import { init as initLogger } from '~/src/logger/init'
+import { App } from '~/src/app/types'
 import { Config } from '~/config.json'
 
 const log = require('~/src/logger').logger('app/init')

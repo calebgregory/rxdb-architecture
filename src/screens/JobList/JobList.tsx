@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { useObservableState } from 'observable-hooks'
 import { datas } from '~/src/util/rxdb/operators'
 import { app } from '~/src/app'
-import { listJobs } from '~/src/query/jobs/list'
+import { listJobs } from '~/src/gql/operations/jobs/list'
 import { getJobTitle } from '~/src/util/jobs'
 import { Job } from '~/src/gql/types/jobs'
 

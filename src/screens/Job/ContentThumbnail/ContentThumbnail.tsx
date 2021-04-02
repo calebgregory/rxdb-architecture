@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { useObservableState } from 'observable-hooks'
 import { app } from '~/src/app'
-import { getContent } from '~/src/query/content/get'
+import { getContent } from '~/src/gql/operations/content/get'
 import { data } from '~/src/util/rxdb/operators'
 import { Content } from '~/src/gql/types/content'
 

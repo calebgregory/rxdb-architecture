@@ -3,17 +3,24 @@ import { useParams } from 'react-router-dom'
 import { useObservableState } from 'observable-hooks'
 import { app } from '~/src/app'
 import { data } from '~/src/util/rxdb/operators'
-import { getJob } from '~/src/query/jobs/get'
-import { setJobWorkflow } from '~/src/mutation/jobs/set-job-workflow'
+import { getJob } from '~/src/gql/operations/jobs/get'
+import { setJobWorkflow } from '~/src/gql/operations/jobs/set-job-workflow'
 import { getJobTitle } from '~/src/util/jobs'
 import { ContentThumbnail } from './ContentThumbnail'
-import { Job as JobT, User } from '~/src/gql/types/jobs'
+import { Job as JobT } from '~/src/gql/types/jobs'
 
 type Params = {
   id: string
 }
 
-function getOwnerName({ family_name, given_name }: User): string {
+export function getOwnerName(job: JobT): string {
+  const { owner_info, owner } = job
+
+  if (!owner_info) {
+    return owner ?? 'N/A'
+  }
+
+  const { family_name, given_name } = owner_info
   return `${given_name} ${family_name}`
 }
 
@@ -36,7 +43,7 @@ export function Job() {
   return (
     <div>
       <h1 id={job!.id}>{getJobTitle(job)}</h1>
-      <h3>Owner: <span style={{ color: 'blue' }}>{getOwnerName(job!.owner_info)}</span></h3>
+      <h3>Owner: <span style={{ color: 'blue' }}>{getOwnerName(job!)}</span></h3>
       <br />
       {!Boolean(job!.workflowName)
         ? <button onClick={handleSetWorkflowClick}>Set this job's workflow!</button>
